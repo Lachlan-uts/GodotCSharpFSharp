@@ -74,6 +74,11 @@ public class Pawn : Area2D
     {
         await ToSignal(pathProvider, "ready");
         CurrentPath = pathProvider.CalcPath(this.Position, currentDestination);
+        if (CurrentPath[CurrentPath.Length-1] != currentDestination)
+        {
+            currentDestination = CurrentPath[CurrentPath.Length-1];
+        }
+        GD.Print(pathProvider.CalcPoint(currentDestination));
     }
 
     private void PathToDestination(Vector2 target)
@@ -93,7 +98,10 @@ public class Pawn : Area2D
         {
             if (this.Position.DistanceTo(currentDestination) > 1)
             {
-                currentPoint++;
+                if (currentPoint < CurrentPath.Length-1)
+                {
+                    currentPoint++;
+                }
                 visAid.RemovePoint(1);
             } else
             {
@@ -105,9 +113,10 @@ public class Pawn : Area2D
  // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
-        if (currentPoint != 0)
+        if (CurrentPath.Length > 1)
         {
             //GD.Print("current point is: ", currentPoint.ToString());
+            GD.Print(currentPoint.ToString());
             velocity = this.Position.DirectionTo(currentPath[currentPoint]);
 
             //GD.Print(velocity);

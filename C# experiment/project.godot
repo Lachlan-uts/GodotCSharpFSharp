@@ -18,6 +18,12 @@ _global_script_class_icons={
 config/name="C# Experiment"
 config/icon="res://icon.png"
 
+[mono]
+
+debugger_agent/wait_for_debugger=true
+debugger_agent/wait_timeout=10000
+
 [rendering]
 
+quality/2d/use_pixel_snap=true
 environment/default_environment="res://default_env.tres"

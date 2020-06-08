@@ -34,8 +34,17 @@ public class PathfindingTilemapExperiment : Node
 
     public Vector2[] CalcPath(Vector2 start, Vector2 end)
     {
+        if (end != pathmaker.GetClosestPoint(end))
+        {
+            end.x = end.x + 0.01f;
+        }
         bool optiChoice = true;
         return pathmaker.GetSimplePath(start,end, optiChoice);
+    }
+
+    public Vector2 CalcPoint(Vector2 point)
+    {
+        return pathmaker.GetClosestPoint(point);
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
