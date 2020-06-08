@@ -28,13 +28,12 @@ position = Vector2( 205.337, 120.017 )
 current = true
 zoom = Vector2( 0.4, 0.4 )
 
-[node name="visualAid" type="Line2D" parent="."]
-
 [node name="Pawn" type="Area2D" parent="."]
-position = Vector2( 25, 25 )
+process_priority = 1
+position = Vector2( 24, 24 )
 script = ExtResource( 4 )
-speed = 10
-destination = Vector2( 350, 25 )
+speed = 30
+currentDestination = Vector2( 80, 80 )
 
 [node name="EntityVisual" type="Sprite" parent="Pawn"]
 scale = Vector2( 0.1, 0.1 )
@@ -45,3 +44,5 @@ __meta__ = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Pawn"]
 shape = SubResource( 1 )
+
+[node name="visualAid" type="Line2D" parent="Pawn"]
