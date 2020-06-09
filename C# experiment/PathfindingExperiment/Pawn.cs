@@ -52,6 +52,12 @@ public class Pawn : Area2D
             }
         }
     }
+
+    //used to calc random wander
+    [Export]
+    private Vector2 wanderOriginOffset;
+    [Export]
+    private Vector2 wanderRectSize;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -73,6 +79,7 @@ public class Pawn : Area2D
     private async Task WorkAround()
     {
         await ToSignal(pathProvider, "ready");
+        WanderAround(pathProvider.CalcValidArea(new Rect2(this.Position+wanderOriginOffset,wanderRectSize))); //make sure you don't subtract a negative vector you silly billy
         CurrentPath = pathProvider.CalcPath(this.Position, currentDestination);
         if (CurrentPath[CurrentPath.Length-1] != currentDestination)
         {
@@ -89,6 +96,23 @@ public class Pawn : Area2D
         }
     }
 
+    private void WanderAround(Rect2 possibleArea)
+    {
+        RandomNumberGenerator rand = new RandomNumberGenerator();
+        rand.Randomize();
+        int[] walkableTiles = new int[] {0}; //hardcoded garbo for now, think more about it later
+        Vector2 point;
+        // point should now be somewhere within the possible area
+        point = new Vector2(
+            rand.RandfRange(possibleArea.Position.x,possibleArea.End.x)
+            ,rand.RandfRange(possibleArea.Position.y,possibleArea.End.y)
+            );
+        // point = new Vector2(
+        //     (float)GD.RandRange(possibleArea.Position.x, possibleArea.End.x)
+        //     ,(float)GD.RandRange(possibleArea.Position.y, possibleArea.End.y)
+        //     );
+        currentDestination = pathProvider.GetValidTile(point,walkableTiles);
+    }
     private void WalkPath()
     {
         // GD.Print("point 0 before update", visAid.GetPointPosition(0).ToString());
@@ -105,7 +129,10 @@ public class Pawn : Area2D
                 visAid.RemovePoint(1);
             } else
             {
-                CurrentPath = new Vector2[0];
+                //hardcode terrible loop thingy
+                WanderAround(pathProvider.CalcValidArea(new Rect2(this.Position+wanderOriginOffset,wanderRectSize)));
+                CurrentPath = pathProvider.CalcPath(this.Position, currentDestination);
+                //CurrentPath = new Vector2[0];
             }
         }
     }
@@ -116,7 +143,7 @@ public class Pawn : Area2D
         if (CurrentPath.Length > 1)
         {
             //GD.Print("current point is: ", currentPoint.ToString());
-            GD.Print(currentPoint.ToString());
+            // GD.Print(currentPoint.ToString());
             velocity = this.Position.DirectionTo(currentPath[currentPoint]);
 
             //GD.Print(velocity);

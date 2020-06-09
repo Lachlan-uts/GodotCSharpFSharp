@@ -47,6 +47,20 @@ public class PathfindingTilemapExperiment : Node
         return pathmaker.GetClosestPoint(point);
     }
 
+    public Rect2 CalcValidArea(Rect2 rect)
+    {
+        //cell size is in 16 atm
+        int cellSize = 16;
+        //convert tilespace to worldspace
+        Rect2 worldTileSpace = new Rect2(floor.GetUsedRect().Position*cellSize,floor.GetUsedRect().Size*cellSize);
+        return worldTileSpace.Clip(rect);
+    }
+
+    public Vector2 GetValidTile(Vector2 targetPoint, int[] validTiles)
+    {
+        return pathmaker.GetClosestPoint(targetPoint);
+    }
+
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 //  public override void _Process(float delta)
 //  {
