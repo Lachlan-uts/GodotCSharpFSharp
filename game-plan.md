@@ -29,6 +29,13 @@ Have a couple of primary "needs/wants" and evaluate them every so often. Then ha
 However each action should send some sort of signal on completion (and maybe start for exclusive actions?) which other A.I can receive
 and also use to modify behaviour. I'm thinking to begin with just having 2 discrete forms of need, one to move (standing as probably a
 placeholder for other needs) and one to rest. Then I can get it to walk about and rest.
+### Needs/wants system
+I think I want to make every need/want some sort of bar that either grows or shrinks. As it passes through different barriers different
+events could be triggered. Different needs/wants should decay up or down, e.g sleep/rest should decay down and boredom should decay up.
+Ideally I want to set min and max values, and the steps, maybe as points in an array (C# or GD collection?). Do I want a dictionary or list
+for holding the different needs? I'm thinking a dictionary which can be iterated over or target specific elements. I think I should be able
+to use an enum to help search for the targeted one.
+
 
 # Game design stuffs
 ## Themes
