@@ -3,10 +3,6 @@ using System;
 
 public class PathfindingTilemapExperiment : Node
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
-
     private Navigation2D pathmaker;
     private TileMap floor;
 

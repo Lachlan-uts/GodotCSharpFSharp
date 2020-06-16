@@ -40,7 +40,6 @@ __meta__ = {
 "_edit_group_": true
 }
 speed = 30
-currentDestination = Vector2( 216, 184 )
 wanderOriginOffset = Vector2( -50, -50 )
 wanderRectSize = Vector2( 100, 100 )
 
@@ -65,7 +64,6 @@ __meta__ = {
 "_edit_group_": true
 }
 speed = 30
-currentDestination = Vector2( 216, 184 )
 wanderOriginOffset = Vector2( -50, -50 )
 wanderRectSize = Vector2( 100, 100 )
 
@@ -90,7 +88,6 @@ __meta__ = {
 "_edit_group_": true
 }
 speed = 30
-currentDestination = Vector2( 216, 184 )
 wanderOriginOffset = Vector2( -50, -50 )
 wanderRectSize = Vector2( 100, 100 )
 
