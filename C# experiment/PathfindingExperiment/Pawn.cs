@@ -5,6 +5,10 @@ using System.Collections.Generic;
 
 public class Pawn : Area2D
 {
+    //Signals first?
+    [Signal]
+    public delegate void TaskExit(bool exitState);
+
     [Export]
     private int needFrameSkip; // This is a magic number to dictate how many frames the loop should skip for doing the need calc
     private int frameCount;
@@ -80,17 +84,17 @@ public class Pawn : Area2D
     enum NeedNames
     {
         Rest,
-        Bordom
+        Boredom
     }
 
     //A tracker of the current targeted need/state?
-    private NeedNames currentTargetNeed = NeedNames.Bordom;
+    private NeedNames currentTargetNeed = NeedNames.Boredom;
 
     private Dictionary<NeedNames, float> needStates
      = new Dictionary<NeedNames, float>
     {
-        {NeedNames.Rest, 10.0f},
-        {NeedNames.Bordom, 0.0f}
+        {NeedNames.Rest, 5.0f},
+        {NeedNames.Boredom, 5.0f}
     };
 
     // I'm thinking maybe I should make this a static reference
@@ -110,7 +114,7 @@ public class Pawn : Area2D
             }
         },
         {
-            NeedNames.Bordom,
+            NeedNames.Boredom,
             new Dictionary<NeedTraits, float>
             {
                 {NeedTraits.OptimumValue, 0.0f},
@@ -125,7 +129,20 @@ public class Pawn : Area2D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        needFrameSkip = 5;
+        // Quick hack to scatter initial values for demo purposes
+        if (true)
+        {
+            RandomNumberGenerator rand = new RandomNumberGenerator();
+            rand.Randomize();
+            List<NeedNames> needStatesKeys = new List<NeedNames>(needStates.Keys);
+            foreach (var key in needStatesKeys)
+            {
+                needStates[key] += rand.RandfRange(-2.0f,2.0f);
+            }
+        }
+        
+        this.Connect("TaskExit",this, "ChooseTask");
+        needFrameSkip = 60;
         frameCount = 0;
 
         GD.Print("doing ready on " + this.Name);
@@ -152,6 +169,7 @@ public class Pawn : Area2D
         {
             await ToSignal(pathProvider, signal);
         }
+        
         Vector2 targetPosition = ChooseWanderDestination(pathProvider.CalcValidArea(new Rect2(this.Position + wanderOriginOffset, wanderRectSize))); //make sure you don't subtract a negative vector you silly billy
         CurrentPath = pathProvider.CalcPath(this.Position, targetPosition);
         if (CurrentPath[CurrentPath.Length - 1] != targetDestination) // I believe unecessary now
@@ -159,10 +177,12 @@ public class Pawn : Area2D
             targetDestination = CurrentPath[CurrentPath.Length - 1];
         }
         GD.Print(pathProvider.CalcPoint(targetDestination));
+        EmitSignal("TaskExit", false);
     }
 
-    private NeedNames EvaluateNeeds(Dictionary<NeedNames, float> currentStates)
+    private NeedNames EvaluateNeeds(Dictionary<NeedNames, float> currentStates, bool isInTaskCurrently=false)
     {
+        var taskStickyness = 2.0f; // "Magic" number for how sticky an existing task just is in general
         // I need to make all states comparable (fix the directional flips) and then evaluate them
         // Setup a random gen to allow for some deviation, to be decided on later.
         RandomNumberGenerator rand = new RandomNumberGenerator();
@@ -172,32 +192,45 @@ public class Pawn : Area2D
         var targetNeed = currentTargetNeed; // Establish the current working need to give it advantage? Allow for some need stickyness
         foreach (NeedNames need in currentStates.Keys)
         {
-            // I need to check distence from minimum (how close to being depleted it is) or "maximum" in the case of something like bordom
-            // In short we're checking for distance from optimum value, or distance to worst value.
-            // The further we are, the worse things are.
-            if (need != targetNeed && 
-                Math.Abs(needsCollections[need][NeedTraits.OptimumValue] - currentStates[need]) > Math.Abs(needsCollections[targetNeed][NeedTraits.OptimumValue] - currentStates[targetNeed])
-                )
+            //going to break up the comparison into a bunch of prior actions to help with reading and tweaking.
+            if (need == targetNeed) {continue;}
+            float evaluatedNeedScore = Math.Abs(needsCollections[targetNeed][NeedTraits.OptimumValue] - currentStates[targetNeed]); // First get the base value
+            if (isInTaskCurrently) {evaluatedNeedScore += taskStickyness;} // Then increase value if currently 
+            if (true) {evaluatedNeedScore += rand.RandfRange(0.0f,1.0f);} // Currently always add random spin but can be changed in future.
+            if (Math.Abs(needsCollections[need][NeedTraits.OptimumValue] - currentStates[need]) < evaluatedNeedScore)
             {
                 targetNeed = need;
             }
+
+            // I need to check distence from minimum (how close to being depleted it is) or "maximum" in the case of something like bordom
+            // In short we're checking for distance from optimum value, or distance to worst value.
+            // The further we are, the worse things are.
+            // if (need != targetNeed && 
+            //     Math.Abs(needsCollections[need][NeedTraits.OptimumValue] - currentStates[need]) > (Math.Abs(needsCollections[targetNeed][NeedTraits.OptimumValue] - currentStates[targetNeed]) + rand.RandfRange(0.0f,10.0f))
+            //     )
+            // {
+            //     targetNeed = need;
+            // }
         }
         return targetNeed;
     }
 
     // There might be wisdom in changing this from void to a return type of state, to help keep track of things though unsure of how to do so currently.
-    private void ChooseState() // I changed the name because the pawn might remain in a state upon evaluation
+    private void ChooseTask(bool isInTaskCurrently=false) // I changed the name because the pawn might remain in a state upon evaluation
     {
-        var chosenNeed = EvaluateNeeds(needStates);
+        var chosenNeed = EvaluateNeeds(needStates, isInTaskCurrently);
 
         //Ideally I should use some sort of match function here but I'm too lazt atm
         if (chosenNeed == NeedNames.Rest)
         {
             GD.Print("choose rest");
-            //Rest();
+            currentTargetNeed = NeedNames.Rest;
+            var taskResult = Rest();
         } else
         {
             GD.Print("choose walk");
+            currentTargetNeed = NeedNames.Boredom;
+            var taskResult = Wander();
             //Task task = DelayedReadyWorkAround("ready");
         }
     }
@@ -209,8 +242,8 @@ public class Pawn : Area2D
     // So I'm not an expert and still trying to solve this but I think it would be better if I had some sort of return value for these.
     private bool Rest()
     {
-        needsCollections[NeedNames.Rest][NeedTraits.CurrentDirection] = needsCollections[NeedNames.Rest][NeedTraits.DecayDirection] * -1.0f; // Is growing
-        needsCollections[NeedNames.Bordom][NeedTraits.CurrentDirection] = needsCollections[NeedNames.Bordom][NeedTraits.DecayDirection]; // Is decaying
+        needsCollections[NeedNames.Rest][NeedTraits.CurrentDirection] = needsCollections[NeedNames.Rest][NeedTraits.DecayDirection]; // Is growing
+        needsCollections[NeedNames.Boredom][NeedTraits.CurrentDirection] = needsCollections[NeedNames.Boredom][NeedTraits.DecayDirection]; // Is decaying
         //currentDestination = this.Position;
         // This rotation method only works if you only trigger rest on changing from a different state!
         // DERP
@@ -231,7 +264,7 @@ public class Pawn : Area2D
     private bool Wander()
     {
         needsCollections[NeedNames.Rest][NeedTraits.CurrentDirection] = needsCollections[NeedNames.Rest][NeedTraits.DecayDirection]; // Is decaying
-        needsCollections[NeedNames.Bordom][NeedTraits.CurrentDirection] = needsCollections[NeedNames.Bordom][NeedTraits.DecayDirection] * -1.0f; // Is growing... (growing is a bad term)
+        needsCollections[NeedNames.Boredom][NeedTraits.CurrentDirection] = needsCollections[NeedNames.Boredom][NeedTraits.DecayDirection]; // Is growing... (growing is a bad term)
 
         // First get an random destination
         Vector2 targetPosition = ChooseWanderDestination(pathProvider.CalcValidArea(new Rect2(this.Position + wanderOriginOffset, wanderRectSize))); //make sure you don't subtract a negative vector you silly billy
@@ -283,6 +316,7 @@ public class Pawn : Area2D
                 // currentDestination = ChooseWanderDestination(pathProvider.CalcValidArea(new Rect2(this.Position + wanderOriginOffset, wanderRectSize)));
                 // CurrentPath = pathProvider.CalcPath(this.Position, currentDestination);
                 CurrentPath = new Vector2[0];
+                //ChooseTask(true);
             }
         }
     }
@@ -356,7 +390,7 @@ public class Pawn : Area2D
                 GD.Print(key.ToString(),": ", needStates[key].ToString());
             }
             frameCount = 0;
-            //ChooseState();
+            ChooseTask();
         }
     }
 
