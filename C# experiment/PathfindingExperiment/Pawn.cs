@@ -195,8 +195,8 @@ public class Pawn : Area2D
             //going to break up the comparison into a bunch of prior actions to help with reading and tweaking.
             if (need == targetNeed) {continue;}
             float evaluatedNeedScore = Math.Abs(needsCollections[targetNeed][NeedTraits.OptimumValue] - currentStates[targetNeed]); // First get the base value
-            if (isInTaskCurrently) {evaluatedNeedScore += taskStickyness;} // Then increase value if currently 
-            if (true) {evaluatedNeedScore += rand.RandfRange(0.0f,1.0f);} // Currently always add random spin but can be changed in future.
+            if (isInTaskCurrently) {evaluatedNeedScore -= taskStickyness;} // Then increase value if currently 
+            if (true) {evaluatedNeedScore -= rand.RandfRange(0.0f,1.0f);} // Currently always add random spin but can be changed in future.
             if (Math.Abs(needsCollections[need][NeedTraits.OptimumValue] - currentStates[need]) < evaluatedNeedScore)
             {
                 targetNeed = need;
@@ -242,8 +242,8 @@ public class Pawn : Area2D
     // So I'm not an expert and still trying to solve this but I think it would be better if I had some sort of return value for these.
     private bool Rest()
     {
-        needsCollections[NeedNames.Rest][NeedTraits.CurrentDirection] = needsCollections[NeedNames.Rest][NeedTraits.DecayDirection]; // Is growing
-        needsCollections[NeedNames.Boredom][NeedTraits.CurrentDirection] = needsCollections[NeedNames.Boredom][NeedTraits.DecayDirection]; // Is decaying
+        needsCollections[NeedNames.Rest][NeedTraits.CurrentDirection] = -1.0f; // Is growing
+        needsCollections[NeedNames.Boredom][NeedTraits.CurrentDirection] = 1.0f; // Is decaying
         //currentDestination = this.Position;
         // This rotation method only works if you only trigger rest on changing from a different state!
         // DERP
@@ -263,8 +263,8 @@ public class Pawn : Area2D
 
     private bool Wander()
     {
-        needsCollections[NeedNames.Rest][NeedTraits.CurrentDirection] = needsCollections[NeedNames.Rest][NeedTraits.DecayDirection]; // Is decaying
-        needsCollections[NeedNames.Boredom][NeedTraits.CurrentDirection] = needsCollections[NeedNames.Boredom][NeedTraits.DecayDirection]; // Is growing... (growing is a bad term)
+        needsCollections[NeedNames.Rest][NeedTraits.CurrentDirection] = 1.0f; // Is decaying
+        needsCollections[NeedNames.Boredom][NeedTraits.CurrentDirection] = -1.0f; // Is growing... (growing is a bad term)
 
         // First get an random destination
         Vector2 targetPosition = ChooseWanderDestination(pathProvider.CalcValidArea(new Rect2(this.Position + wanderOriginOffset, wanderRectSize))); //make sure you don't subtract a negative vector you silly billy
