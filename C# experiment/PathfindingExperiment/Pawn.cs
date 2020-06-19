@@ -129,6 +129,9 @@ public class Pawn : Area2D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        base._Ready(); // Ensures the basic ready has completed
+        AddToGroup("Pawns"); //hardcoded group and might not even be the best solution, but should do for now.
+
         // Quick hack to scatter initial values for demo purposes
         if (true)
         {
@@ -140,8 +143,7 @@ public class Pawn : Area2D
                 needStates[key] += rand.RandfRange(-2.0f,2.0f);
             }
         }
-        
-        this.Connect("TaskExit",this, "ChooseTask");
+        this.Connect("TaskExit", this, "ChooseTask");
         needFrameSkip = 60;
         frameCount = 0;
 
@@ -177,9 +179,11 @@ public class Pawn : Area2D
             targetDestination = CurrentPath[CurrentPath.Length - 1];
         }
         GD.Print(pathProvider.CalcPoint(targetDestination));
+        var tileTest = ChangeTile(1,new Rect2(this.Position + wanderOriginOffset, wanderRectSize));
         EmitSignal("TaskExit", false);
     }
 
+    // Find which, if any need is the most critical
     private NeedNames EvaluateNeeds(Dictionary<NeedNames, float> currentStates, bool isInTaskCurrently=false)
     {
         var taskStickyness = 2.0f; // "Magic" number for how sticky an existing task just is in general
@@ -215,8 +219,9 @@ public class Pawn : Area2D
         return targetNeed;
     }
 
-    // There might be wisdom in changing this from void to a return type of state, to help keep track of things though unsure of how to do so currently.
-    private void ChooseTask(bool isInTaskCurrently=false) // I changed the name because the pawn might remain in a state upon evaluation
+    // I should have another method or fix/extend the one below to from a given need, find out which is the most relevent job.
+    // There might be wisdom in changing this from void to a return type of state or task, to help keep track of things though unsure of how to do so currently.
+    private void ChooseTask(bool isInTaskCurrently=false) // I changed the name because the pawn might remain in a given task/state upon evaluation
     {
         var chosenNeed = EvaluateNeeds(needStates, isInTaskCurrently);
 
@@ -234,9 +239,6 @@ public class Pawn : Area2D
             //Task task = DelayedReadyWorkAround("ready");
         }
     }
-
-    // For now I'm just going to make all states do nothing.
-    // Aside from influence needs
 
     // This function/method should allow for dictating a rest state.
     // So I'm not an expert and still trying to solve this but I think it would be better if I had some sort of return value for these.
@@ -261,6 +263,7 @@ public class Pawn : Area2D
         return true;
     }
 
+    // I'm thinking rather than having a return type, cause it to emmit a signal at the end?
     private bool Wander()
     {
         needsCollections[NeedNames.Rest][NeedTraits.CurrentDirection] = 1.0f; // Is decaying
@@ -269,10 +272,42 @@ public class Pawn : Area2D
         // First get an random destination
         Vector2 targetPosition = ChooseWanderDestination(pathProvider.CalcValidArea(new Rect2(this.Position + wanderOriginOffset, wanderRectSize))); //make sure you don't subtract a negative vector you silly billy
         // Second, calculate the path to walk from that destination
-        CurrentPath = pathProvider.CalcPath(this.Position, targetPosition);
+        //CurrentPath = pathProvider.CalcPath(this.Position, targetPosition);
         // There probably should be a third, to let you know it finished executing. Maybe I should make these states/tasks return true or false?
         //I'm going to experiment with that now
         return true;
+    }
+
+    private bool Converse()
+    {
+        var pawns = GetTree().GetNodesInGroup("Pawns"); //get a list of all pawns
+        pawns.Remove(this); //remove self from said list
+        return true;
+
+        Area2D EvaluateConverseOptions(string[] groups)
+        {
+            return new Area2D();
+        }
+    }
+
+    // Silent again for this recording, at least to begin with.
+    // I'm currently trying to work out how best to make plants.
+    // Now I know I want interaction so it makes sense for them to be individual nodes. At the same time they, sensibly exist very linked to the tilemap.
+    // So I'm currently going to do some testing with enabling pawns to edit the tilemap and see what that tells me.
+    // I think I'll probably end up with some sort of hybrid system, where the tilemap changes cause a node/scene to be instanced at a location.
+    //Assume you're always working out relative to self for now
+    private bool ChangeTile(int tileID, Rect2 prematureOptimisation)
+    {
+        Vector2 targetPosition = GetNearestTilePosition();
+        CurrentPath = pathProvider.CalcPath(this.Position, targetPosition);
+        return true;
+        // My brain is already thinking about optomisation problems, such as just searching for all tiles of a given type isn't exactly efficient but bleh, just do naive for now.
+        // Just select a target cell first.
+        Vector2 GetNearestTilePosition()
+        {
+            var targetDestination = pathProvider.GetClosestTargetTile(this.Position,tileID,5);
+            return targetDestination;
+        }
     }
 
     //Setting the needs rates should not be within an "evaluation" method, only those which actually cause an "action"
@@ -292,7 +327,6 @@ public class Pawn : Area2D
     }
 
     // Here's a question, should I remove the idea of target destination and just use the last element in the path array? nvm
-    
     // Walking a path shouldn't care about any specific task as many could include it, just if it current has a path to walk.
     private void WalkPath()
     {
@@ -348,49 +382,18 @@ public class Pawn : Area2D
             List<NeedNames> needStatesKeys = new List<NeedNames>(needStates.Keys);
             foreach (var key in needStatesKeys)
             {
-                GD.Print(key.ToString());
-                GD.Print(needsCollections[key][NeedTraits.CurrentDirection].ToString());
-                GD.Print(needsCollections[key][NeedTraits.DecayDirection].ToString());
+                GD.Print(key.ToString()
+                    , ":"
+                    ,needsCollections[key][NeedTraits.CurrentDirection].ToString()
+                    ,","
+                    ,needsCollections[key][NeedTraits.DecayDirection].ToString()
+                    ," - "
+                    ,needStates[key].ToString());
                 needStates[key] += adjustNeed(key, needsCollections[key][NeedTraits.CurrentDirection] == needsCollections[key][NeedTraits.DecayDirection]);
-                // // I should know what direction it's currently heading, so I should just need to check against what it will reach.
-                // if ( needsCollections[key][NeedTraits.CurrentDirection] == needsCollections[key][NeedTraits.DecayDirection]) // If it's currently decaying
-                // {
-                //     // I need to check that it's within this limit, the problem being it could be going up or down towards it...
-                //     if (needsCollections[key][NeedTraits.CurrentDirection] == 1.0f && needStates[key] > needsCollections[key][NeedTraits.WorstValue]) // if it's decaying down
-                //     {
-                //         needStates[key] -= (needsCollections[key][NeedTraits.DecayRate] * needsCollections[key][NeedTraits.CurrentDirection]);
-                //     }
-                //     if (needsCollections[key][NeedTraits.CurrentDirection] == -1.0f && needStates[key] < needsCollections[key][NeedTraits.WorstValue]) // if it's decaying up
-                //     {
-                //         needStates[key] -= (needsCollections[key][NeedTraits.DecayRate] * needsCollections[key][NeedTraits.CurrentDirection]);
-                //     }
-
-                // } else // if it's currently "restoring"
-                // {
-                //     // I've thrown around too many negatives, it's hard to keep track of them all.
-                //     if (needsCollections[key][NeedTraits.CurrentDirection] == 1.0f && needStates[key] > needsCollections[key][NeedTraits.WorstValue]) // if it's decaying down
-                //     {
-                //         needStates[key] -= (needsCollections[key][NeedTraits.DecayRate] * needsCollections[key][NeedTraits.CurrentDirection]);
-                //     }
-                //     if (needsCollections[key][NeedTraits.CurrentDirection] == -1.0f && needStates[key] < needsCollections[key][NeedTraits.WorstValue]) // if it's decaying up
-                //     {
-                //         needStates[key] -= (needsCollections[key][NeedTraits.DecayRate] * needsCollections[key][NeedTraits.CurrentDirection]);
-                //     }
-                // }
-
-                // if  (
-                //         needStates[key] > Math.Min(needsCollections[key][NeedTraits.OptimumValue],needsCollections[key][NeedTraits.WorstValue]) // Check it's greater than the floor
-                //         && needStates[key] < Math.Max(needsCollections[key][NeedTraits.OptimumValue],needsCollections[key][NeedTraits.WorstValue]) // Check it's less than the roof
-                //     ) // Make sure the need is within the range of values.
-                // {
-                //     // A need should decay via minus, as most needs are depleted during decay.
-                //     // So when I wish to decay I should use positive numbers and when I wish to restore I should use positive numbers.
-                //     needStates[key] -= (needsCollections[key][NeedTraits.DecayRate] * needsCollections[key][NeedTraits.CurrentDirection]); //adjust the need
-                // }
-                GD.Print(key.ToString(),": ", needStates[key].ToString());
             }
             frameCount = 0;
-            ChooseTask();
+            EmitSignal("TaskExit", false); //Run the Task Evaluator
+            //ChooseTask();
         }
     }
 

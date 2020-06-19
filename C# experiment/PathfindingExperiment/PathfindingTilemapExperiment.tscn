@@ -1,12 +1,12 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://PathfindingExperiment/BasicTileset.tres" type="TileSet" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://lomaka/dungeon16.bmp" type="Texture" id=2]
 [ext_resource path="res://PathfindingExperiment/PathfindingTilemapExperiment.cs" type="Script" id=3]
-[ext_resource path="res://PathfindingExperiment/Pawn.cs" type="Script" id=4]
+[ext_resource path="res://Pawn.tscn" type="PackedScene" id=5]
 
-[sub_resource type="CircleShape2D" id=1]
-radius = 2.62671
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 8.53172, 8.35224 )
 
 [node name="Node" type="Node"]
 script = ExtResource( 3 )
@@ -32,74 +32,28 @@ position = Vector2( 205.337, 120.017 )
 current = true
 zoom = Vector2( 0.4, 0.4 )
 
-[node name="Pawn" type="Area2D" parent="."]
-process_priority = 1
-position = Vector2( 24, 24 )
-script = ExtResource( 4 )
+[node name="Pawn" parent="." instance=ExtResource( 5 )]
+position = Vector2( 34.3146, 35.0139 )
+
+[node name="Pawn2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 195.275, 59.5974 )
+
+[node name="Pawn3" parent="." instance=ExtResource( 5 )]
+position = Vector2( 117.007, 204.768 )
+
+[node name="Pawn4" parent="." instance=ExtResource( 5 )]
+position = Vector2( 344.453, 135.713 )
+
+[node name="Plants" type="Area2D" parent="."]
+position = Vector2( 72.0287, 103.914 )
 __meta__ = {
 "_edit_group_": true
 }
-speed = 30
-wanderOriginOffset = Vector2( -50, -50 )
-wanderRectSize = Vector2( 100, 100 )
 
-[node name="EntityVisual" type="Sprite" parent="Pawn"]
-scale = Vector2( 0.1, 0.1 )
+[node name="Sprite" type="Sprite" parent="Plants"]
 texture = ExtResource( 2 )
-__meta__ = {
-"_edit_lock_": true
-}
+region_enabled = true
+region_rect = Rect2( 48, 112, 16, 16 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Pawn"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Plants"]
 shape = SubResource( 1 )
-
-[node name="visualAid" type="Line2D" parent="Pawn"]
-width = 1.0
-
-[node name="Pawn2" type="Area2D" parent="."]
-process_priority = 1
-position = Vector2( 144.165, 172.889 )
-script = ExtResource( 4 )
-__meta__ = {
-"_edit_group_": true
-}
-speed = 30
-wanderOriginOffset = Vector2( -50, -50 )
-wanderRectSize = Vector2( 100, 100 )
-
-[node name="EntityVisual" type="Sprite" parent="Pawn2"]
-scale = Vector2( 0.1, 0.1 )
-texture = ExtResource( 2 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Pawn2"]
-shape = SubResource( 1 )
-
-[node name="visualAid" type="Line2D" parent="Pawn2"]
-width = 1.0
-
-[node name="Pawn3" type="Area2D" parent="."]
-process_priority = 1
-position = Vector2( 304.912, 127.827 )
-script = ExtResource( 4 )
-__meta__ = {
-"_edit_group_": true
-}
-speed = 30
-wanderOriginOffset = Vector2( -50, -50 )
-wanderRectSize = Vector2( 100, 100 )
-
-[node name="EntityVisual" type="Sprite" parent="Pawn3"]
-scale = Vector2( 0.1, 0.1 )
-texture = ExtResource( 2 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Pawn3"]
-shape = SubResource( 1 )
-
-[node name="visualAid" type="Line2D" parent="Pawn3"]
-width = 1.0

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class PathfindingTilemapExperiment : Node
 {
@@ -55,6 +56,41 @@ public class PathfindingTilemapExperiment : Node
     public Vector2 GetValidTile(Vector2 targetPoint, int[] validTiles)
     {
         return pathmaker.GetClosestPoint(targetPoint);
+    }
+
+    //If I make this also return a path then I'd need another walk path method potentially...
+    public Vector2 GetClosestTargetTile(Vector2 start, int targetTileID, int maxRange)
+    {
+        var possiblePoints = GetTargetTilesInArea(floor.WorldToMap(start),targetTileID,maxRange);
+        // possiblePoints.Sort();
+        Vector2 targetTile = possiblePoints[0];
+        foreach (Vector2 tile in possiblePoints)
+        {
+            if ((tile-floor.WorldToMap(start)).LengthSquared() < targetTile.LengthSquared())
+            {
+                targetTile = tile;
+            }
+        }
+        return floor.MapToWorld(targetTile);
+        
+    }
+
+    public List<Vector2> GetTargetTilesInArea(Vector2 centerPoint, int targetTileID, int maxRange)
+    {
+        var listOfTiles = floor.GetUsedCellsById(targetTileID); //This returns an array of vector 2's
+        
+        List<Vector2> validTiles = new List<Vector2>();
+
+        // Godot.Collections.Array<Vector2> validTiles = new Godot.Collections.Array<Vector2>();
+        foreach (Vector2 point in floor.GetUsedCellsById(targetTileID))
+        {
+            if (centerPoint.DistanceTo(point) < (float)maxRange)
+            {
+                validTiles.Add(point);
+            }
+        }
+
+        return validTiles;
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://PathfindingExperiment/Pawn.cs" type="Script" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 4.99452
+
+[node name="Pawn" type="Area2D" groups=[
+"Pawns",
+]]
+process_priority = 1
+position = Vector2( 24, 24 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+speed = 30
+wanderOriginOffset = Vector2( -50, -50 )
+wanderRectSize = Vector2( 100, 100 )
+
+[node name="EntityVisual" type="Sprite" parent="."]
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="visualAid" type="Line2D" parent="."]
+width = 1.0
