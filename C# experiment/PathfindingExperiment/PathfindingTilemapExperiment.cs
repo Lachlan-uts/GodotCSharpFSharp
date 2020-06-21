@@ -31,12 +31,14 @@ public class PathfindingTilemapExperiment : Node
 
     public Vector2[] CalcPath(Vector2 start, Vector2 end)
     {
+        var curPath = pathmaker.GetSimplePath(start, end, true);
+        var testPath = pathmaker.GetSimplePath(start, pathmaker.GetClosestPoint(end), true);
         if (end != pathmaker.GetClosestPoint(end))
         {
             end.x = end.x + 0.01f;
         }
         bool optiChoice = true;
-        return pathmaker.GetSimplePath(start,end, optiChoice);
+        return pathmaker.GetSimplePath(start, end, optiChoice);
     }
 
     public Vector2 CalcPoint(Vector2 point)
@@ -66,12 +68,13 @@ public class PathfindingTilemapExperiment : Node
         Vector2 targetTile = possiblePoints[0];
         foreach (Vector2 tile in possiblePoints)
         {
-            if ((tile-floor.WorldToMap(start)).LengthSquared() < targetTile.LengthSquared())
+            if ((tile-floor.WorldToMap(start)).LengthSquared() < (targetTile-floor.WorldToMap(start)).LengthSquared())
             {
                 targetTile = tile;
             }
         }
-        return floor.MapToWorld(targetTile);
+
+        return floor.MapToWorld(targetTile,false); // Map to world doesn't correctly respect tile origin point.
         
     }
 
@@ -91,6 +94,17 @@ public class PathfindingTilemapExperiment : Node
         }
 
         return validTiles;
+    }
+
+    public bool ChangeTile(Vector2 tileWorldPoint, int newTileID)
+    {
+        Vector2 targetTile = floor.WorldToMap(tileWorldPoint);
+        if (floor.GetCellv(targetTile) != -1)
+        {
+            floor.SetCellv(targetTile,newTileID);
+            return true; // Was able to change the Cell
+        }
+        return false; // Failed to change the cell
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.

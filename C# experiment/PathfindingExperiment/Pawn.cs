@@ -6,8 +6,15 @@ using System.Collections.Generic;
 public class Pawn : Area2D
 {
     //Signals first?
+    // State Restult Signal
     [Signal]
     public delegate void TaskExit(bool exitState);
+
+    //Iv'e decided it's better/more readable to have 2 signals, one to add to the buffer and one to remove.
+    [Signal]
+    public delegate void TaskBufferAdd(string[] tasks);
+    [Signal]
+    public delegate void TaskBufferRemove(string[] tasks);
 
     [Export]
     private int needFrameSkip; // This is a magic number to dictate how many frames the loop should skip for doing the need calc
@@ -126,9 +133,15 @@ public class Pawn : Area2D
         },
     };
 
-    // Called when the node enters the scene tree for the first time.
+
+    [Export]
+    private List<string> actionBuffer = new List<string>();
+
+    private Vector2 targetTilePos = new Vector2();
+    
     public override void _Ready()
     {
+        //var actionForm = (name: "string", blocking: true, target)
         base._Ready(); // Ensures the basic ready has completed
         AddToGroup("Pawns"); //hardcoded group and might not even be the best solution, but should do for now.
 
@@ -152,7 +165,7 @@ public class Pawn : Area2D
         visAid.SetAsToplevel(true);
         if (GetParent() is PathfindingTilemapExperiment)
         {
-            pathProvider = GetParent<PathfindingTilemapExperiment>();
+            pathProvider = GetParent<PathfindingTilemapExperiment>(); // I should really break up path provider into 2 parts. A path provider and a map interactor.
         }
         else
         {
@@ -173,14 +186,17 @@ public class Pawn : Area2D
         }
         
         Vector2 targetPosition = ChooseWanderDestination(pathProvider.CalcValidArea(new Rect2(this.Position + wanderOriginOffset, wanderRectSize))); //make sure you don't subtract a negative vector you silly billy
+        //CurrentPath = pathProvider.CalcPath(this.Position, targetDestination);
         CurrentPath = pathProvider.CalcPath(this.Position, targetPosition);
         if (CurrentPath[CurrentPath.Length - 1] != targetDestination) // I believe unecessary now
         {
             targetDestination = CurrentPath[CurrentPath.Length - 1];
         }
         GD.Print(pathProvider.CalcPoint(targetDestination));
-        var tileTest = ChangeTile(1,new Rect2(this.Position + wanderOriginOffset, wanderRectSize));
-        EmitSignal("TaskExit", false);
+
+        // The below forces it to only ever move to the closest wall tile.
+        var tileChangeTest = ChangeTile(1,new Rect2(this.Position + wanderOriginOffset, wanderRectSize));
+        //EmitSignal("TaskExit", false);
     }
 
     // Find which, if any need is the most critical
@@ -236,7 +252,7 @@ public class Pawn : Area2D
             GD.Print("choose walk");
             currentTargetNeed = NeedNames.Boredom;
             var taskResult = Wander();
-            //Task task = DelayedReadyWorkAround("ready");
+            Task task = DelayedReadyWorkAround("blah");
         }
     }
 
@@ -278,10 +294,12 @@ public class Pawn : Area2D
         return true;
     }
 
-    private bool Converse()
+    private bool RandomConverse() // Just going to make this select a target at random for now.
     {
-        var pawns = GetTree().GetNodesInGroup("Pawns"); //get a list of all pawns
+        Godot.Collections.Array pawns = GetTree().GetNodesInGroup("Pawns"); //get a list of all pawns
         pawns.Remove(this); //remove self from said list
+        // Make the just the first pawn left, if there is at least one left, the conversation target.
+
         return true;
 
         Area2D EvaluateConverseOptions(string[] groups)
@@ -298,8 +316,10 @@ public class Pawn : Area2D
     //Assume you're always working out relative to self for now
     private bool ChangeTile(int tileID, Rect2 prematureOptimisation)
     {
-        Vector2 targetPosition = GetNearestTilePosition();
-        CurrentPath = pathProvider.CalcPath(this.Position, targetPosition);
+        Vector2 targetPosition = GetNearestTilePosition(); //Find nearest tile
+        if (targetPosition != targetTilePos) { targetTilePos = targetPosition; } //make it the target, if not already
+        CurrentPath = pathProvider.CalcPath(this.Position, targetPosition); // Path to it.
+
         return true;
         // My brain is already thinking about optomisation problems, such as just searching for all tiles of a given type isn't exactly efficient but bleh, just do naive for now.
         // Just select a target cell first.
@@ -346,11 +366,9 @@ public class Pawn : Area2D
             }
             else //happens when you reach the final point.
             {
-                //hardcode terrible loop thingy
-                // currentDestination = ChooseWanderDestination(pathProvider.CalcValidArea(new Rect2(this.Position + wanderOriginOffset, wanderRectSize)));
-                // CurrentPath = pathProvider.CalcPath(this.Position, currentDestination);
+                bool tileChanged = pathProvider.ChangeTile(targetTilePos,0);
                 CurrentPath = new Vector2[0];
-                //ChooseTask(true);
+                //EmitSignal("TaskExit", true);
             }
         }
     }
@@ -359,6 +377,7 @@ public class Pawn : Area2D
     public override void _Process(float delta)
     {
         //This movement function shouldn't care about state, though maybe care about needs? Clearly it should also be interuptable eventually
+        // Should probably pull at least part of this logic into WalkPath() (or equivelent) method.
         if (CurrentPath.Length > 1 && needStates[NeedNames.Rest] > 0)
         {
             //GD.Print("current point is: ", currentPoint.ToString());
