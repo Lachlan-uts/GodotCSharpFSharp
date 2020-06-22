@@ -56,7 +56,7 @@
     <Compile Include="PathfindingExperiment\BasicTileset.cs" />
     <Compile Include="PathfindingExperiment\PathfindingTilemapExperiment.cs" />
     <Compile Include="PathfindingExperiment\Pawn.cs" />
-    <Compile Include="Plant.cs" />
+    <Compile Include="Plants\Plant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TilemapExperiment\TileMap.cs" />
   </ItemGroup>

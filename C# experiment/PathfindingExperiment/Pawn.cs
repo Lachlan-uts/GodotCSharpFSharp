@@ -138,9 +138,13 @@ public class Pawn : Area2D
     private List<string> actionBuffer = new List<string>();
 
     private Vector2 targetTilePos = new Vector2();
+    private bool calculateTilePos = false;
+
+    private List<Task> taskBuffer;
     
     public override void _Ready()
     {
+        taskBuffer = new List<Task>();
         //var actionForm = (name: "string", blocking: true, target)
         base._Ready(); // Ensures the basic ready has completed
         AddToGroup("Pawns"); //hardcoded group and might not even be the best solution, but should do for now.
@@ -195,7 +199,7 @@ public class Pawn : Area2D
         GD.Print(pathProvider.CalcPoint(targetDestination));
 
         // The below forces it to only ever move to the closest wall tile.
-        var tileChangeTest = ChangeTile(1,new Rect2(this.Position + wanderOriginOffset, wanderRectSize));
+        var tileChangeTest = ChangeTile(2,new Rect2(this.Position + wanderOriginOffset, wanderRectSize));
         //EmitSignal("TaskExit", false);
     }
 
@@ -320,6 +324,8 @@ public class Pawn : Area2D
         if (targetPosition != targetTilePos) { targetTilePos = targetPosition; } //make it the target, if not already
         CurrentPath = pathProvider.CalcPath(this.Position, targetPosition); // Path to it.
 
+        calculateTilePos = true; // Hardcoded solution to 0,0 bug
+
         return true;
         // My brain is already thinking about optomisation problems, such as just searching for all tiles of a given type isn't exactly efficient but bleh, just do naive for now.
         // Just select a target cell first.
@@ -346,6 +352,9 @@ public class Pawn : Area2D
         return pathProvider.GetValidTile(point, walkableTiles);
     }
 
+    // I really need that job buffer/queue working but I don't think I have the time.
+    // I think I'll just need to deal with this bug for now.
+
     // Here's a question, should I remove the idea of target destination and just use the last element in the path array? nvm
     // Walking a path shouldn't care about any specific task as many could include it, just if it current has a path to walk.
     private void WalkPath()
@@ -366,7 +375,7 @@ public class Pawn : Area2D
             }
             else //happens when you reach the final point.
             {
-                bool tileChanged = pathProvider.ChangeTile(targetTilePos,0);
+                if (calculateTilePos) { bool tileChanged = pathProvider.ChangeTile(targetTilePos,0); }
                 CurrentPath = new Vector2[0];
                 //EmitSignal("TaskExit", true);
             }
