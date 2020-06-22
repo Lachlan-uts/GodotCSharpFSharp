@@ -16,6 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="C# Experiment"
+run/main_scene="res://PathfindingExperiment/PathfindingTilemapExperiment.tscn"
 config/icon="res://icon.png"
 
 [mono]

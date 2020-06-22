@@ -1,0 +1,6 @@
+/home/vortai/Documents/Uni Work/Honors Godot Creations/C# experiment/.mono/temp/bin/Release/C# Experiment.dll
+/home/vortai/Documents/Uni Work/Honors Godot Creations/C# experiment/.mono/temp/bin/Release/C# Experiment.pdb
+/home/vortai/Documents/Uni Work/Honors Godot Creations/C# experiment/.mono/temp/obj/Release/C# Experiment.csprojAssemblyReference.cache
+/home/vortai/Documents/Uni Work/Honors Godot Creations/C# experiment/.mono/temp/obj/Release/C# Experiment.csproj.CoreCompileInputs.cache
+/home/vortai/Documents/Uni Work/Honors Godot Creations/C# experiment/.mono/temp/obj/Release/C# Experiment.dll
+/home/vortai/Documents/Uni Work/Honors Godot Creations/C# experiment/.mono/temp/obj/Release/C# Experiment.pdb

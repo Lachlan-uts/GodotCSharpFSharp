@@ -34,7 +34,7 @@ public class Pawn : Area2D
 
     //these 2 are used to step through a path.
     private int currentPoint;
-    private Vector2[] currentPath;
+    private Vector2[] currentPath = new Vector2[0];
     public Vector2[] CurrentPath
     {
         get
@@ -143,6 +143,7 @@ public class Pawn : Area2D
     private Queue<Task> taskBuffer;
 
     private Task taco;
+    private Task task;
 
     public override void _Ready()
     {
@@ -178,7 +179,7 @@ public class Pawn : Area2D
         }
         //hardcoded set for now until I provide some thing to do this.
         
-        Task task = DelayedReadyWorkAround("ready");
+        task = DelayedReadyWorkAround("ready");
         taskBuffer = new Queue<Task>();
         taco = WalkPathAsync();
         // taskBuffer.Enqueue(taco);
@@ -221,6 +222,8 @@ public class Pawn : Area2D
 
     private async Task DelayedReadyWorkAround(string signal)
     {
+        //await Task.Delay(100); // A forced await to see if this helps
+
         //await Task.Yield(); //Maybe this will help???
         // A hack to enable reuse of this function.
         // I CAN FEEL YOUR JUDGEMENT PLZ FORGIVE!
@@ -428,6 +431,7 @@ public class Pawn : Area2D
     {
         //This movement function shouldn't care about state, though maybe care about needs? Clearly it should also be interuptable eventually
         // Should probably pull at least part of this logic into WalkPath() (or equivelent) method.
+
         if (CurrentPath.Length > 1 && needStates[NeedNames.Rest] > 0)
         {
             //GD.Print("current point is: ", currentPoint.ToString());
