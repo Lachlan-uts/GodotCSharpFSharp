@@ -47,7 +47,7 @@ public class Pawn : Area2D
             this.currentPath = value; //assign the private value
             if (currentPath.Length > 1)
             {
-                targetDestination = currentPath[currentPath.Length-1];
+                targetDestination = currentPath[currentPath.Length - 1];
                 currentPoint = 1;
                 foreach (Vector2 point in currentPath)
                 {
@@ -140,11 +140,12 @@ public class Pawn : Area2D
     private Vector2 targetTilePos = new Vector2();
     private bool calculateTilePos = false;
 
-    private List<Task> taskBuffer;
-    
+    private Queue<Task> taskBuffer;
+
+    private Task taco;
+
     public override void _Ready()
     {
-        taskBuffer = new List<Task>();
         //var actionForm = (name: "string", blocking: true, target)
         base._Ready(); // Ensures the basic ready has completed
         AddToGroup("Pawns"); //hardcoded group and might not even be the best solution, but should do for now.
@@ -157,7 +158,7 @@ public class Pawn : Area2D
             List<NeedNames> needStatesKeys = new List<NeedNames>(needStates.Keys);
             foreach (var key in needStatesKeys)
             {
-                needStates[key] += rand.RandfRange(-2.0f,2.0f);
+                needStates[key] += rand.RandfRange(-2.0f, 2.0f);
             }
         }
         this.Connect("TaskExit", this, "ChooseTask");
@@ -176,19 +177,58 @@ public class Pawn : Area2D
             GD.PrintErr("The parent was wrong!");
         }
         //hardcoded set for now until I provide some thing to do this.
+        
         Task task = DelayedReadyWorkAround("ready");
+        taskBuffer = new Queue<Task>();
+        taco = WalkPathAsync();
+        // taskBuffer.Enqueue(taco);
+        // taskBuffer.Enqueue(WalkPathAsync(DelayedReadyWorkAround("ready")));
+        // taskBuffer.Peek();
         //destination = this.Position;
+        //one second.
+    }
+
+    // So for some freaking reason this just keeps on faulting and I don't know why
+    private async Task WalkPathAsync(Task workAround=null)
+    {
+        if (workAround != null) { await workAround; }
+        await Task.Yield();
+        //await workAround;
+        await ToSignal(this.GetTree(), "idle_frame");
+        int i = 0;
+        while (i < 100)
+        {
+            i++;
+            await ToSignal(this.GetTree(), "idle_frame");
+            // if (this.Position.DistanceTo(CurrentPath[currentPoint]) < 1) // When you basically reach your current target point in a path
+            // {
+            //     // This whole inner block of the parent if statement will only trigger when reaching a given point
+            //     if (this.Position.DistanceTo(CurrentPath[CurrentPath.Length - 1]) > 1) // If the pawn has yet to reach its final destination 
+            //     {
+            //         if (currentPoint < CurrentPath.Length - 1) // Check to see how far along the path you are
+            //         {
+            //         }
+            //     }
+            //     else //happens when you reach the final point.
+            //     {
+            //         GD.Print("Reached the end of the async I think");
+            //     }
+            // }
+            
+        }
+        return;
     }
 
     private async Task DelayedReadyWorkAround(string signal)
     {
+        //await Task.Yield(); //Maybe this will help???
         // A hack to enable reuse of this function.
         // I CAN FEEL YOUR JUDGEMENT PLZ FORGIVE!
         if (signal == "ready")
         {
-            await ToSignal(pathProvider, signal);
+            await ToSignal(this.pathProvider, signal);
         }
-        
+
         Vector2 targetPosition = ChooseWanderDestination(pathProvider.CalcValidArea(new Rect2(this.Position + wanderOriginOffset, wanderRectSize))); //make sure you don't subtract a negative vector you silly billy
         //CurrentPath = pathProvider.CalcPath(this.Position, targetDestination);
         CurrentPath = pathProvider.CalcPath(this.Position, targetPosition);
@@ -199,12 +239,12 @@ public class Pawn : Area2D
         GD.Print(pathProvider.CalcPoint(targetDestination));
 
         // The below forces it to only ever move to the closest wall tile.
-        var tileChangeTest = ChangeTile(2,new Rect2(this.Position + wanderOriginOffset, wanderRectSize));
+        var tileChangeTest = ChangeTile(2, new Rect2(this.Position + wanderOriginOffset, wanderRectSize));
         //EmitSignal("TaskExit", false);
     }
 
     // Find which, if any need is the most critical
-    private NeedNames EvaluateNeeds(Dictionary<NeedNames, float> currentStates, bool isInTaskCurrently=false)
+    private NeedNames EvaluateNeeds(Dictionary<NeedNames, float> currentStates, bool isInTaskCurrently = false)
     {
         var taskStickyness = 2.0f; // "Magic" number for how sticky an existing task just is in general
         // I need to make all states comparable (fix the directional flips) and then evaluate them
@@ -217,10 +257,10 @@ public class Pawn : Area2D
         foreach (NeedNames need in currentStates.Keys)
         {
             //going to break up the comparison into a bunch of prior actions to help with reading and tweaking.
-            if (need == targetNeed) {continue;}
+            if (need == targetNeed) { continue; }
             float evaluatedNeedScore = Math.Abs(needsCollections[targetNeed][NeedTraits.OptimumValue] - currentStates[targetNeed]); // First get the base value
-            if (isInTaskCurrently) {evaluatedNeedScore -= taskStickyness;} // Then increase value if currently 
-            if (true) {evaluatedNeedScore -= rand.RandfRange(0.0f,1.0f);} // Currently always add random spin but can be changed in future.
+            if (isInTaskCurrently) { evaluatedNeedScore -= taskStickyness; } // Then increase value if currently 
+            if (true) { evaluatedNeedScore -= rand.RandfRange(0.0f, 1.0f); } // Currently always add random spin but can be changed in future.
             if (Math.Abs(needsCollections[need][NeedTraits.OptimumValue] - currentStates[need]) < evaluatedNeedScore)
             {
                 targetNeed = need;
@@ -241,7 +281,7 @@ public class Pawn : Area2D
 
     // I should have another method or fix/extend the one below to from a given need, find out which is the most relevent job.
     // There might be wisdom in changing this from void to a return type of state or task, to help keep track of things though unsure of how to do so currently.
-    private void ChooseTask(bool isInTaskCurrently=false) // I changed the name because the pawn might remain in a given task/state upon evaluation
+    private void ChooseTask(bool isInTaskCurrently = false) // I changed the name because the pawn might remain in a given task/state upon evaluation
     {
         var chosenNeed = EvaluateNeeds(needStates, isInTaskCurrently);
 
@@ -251,7 +291,8 @@ public class Pawn : Area2D
             GD.Print("choose rest");
             currentTargetNeed = NeedNames.Rest;
             var taskResult = Rest();
-        } else
+        }
+        else
         {
             GD.Print("choose walk");
             currentTargetNeed = NeedNames.Boredom;
@@ -331,7 +372,7 @@ public class Pawn : Area2D
         // Just select a target cell first.
         Vector2 GetNearestTilePosition()
         {
-            var targetDestination = pathProvider.GetClosestTargetTile(this.Position,tileID,5);
+            var targetDestination = pathProvider.GetClosestTargetTile(this.Position, tileID, 5);
             return targetDestination;
         }
     }
@@ -375,7 +416,7 @@ public class Pawn : Area2D
             }
             else //happens when you reach the final point.
             {
-                if (calculateTilePos) { bool tileChanged = pathProvider.ChangeTile(targetTilePos,0); }
+                if (calculateTilePos) { bool tileChanged = pathProvider.ChangeTile(targetTilePos, 0); }
                 CurrentPath = new Vector2[0];
                 //EmitSignal("TaskExit", true);
             }
@@ -397,6 +438,15 @@ public class Pawn : Area2D
             this.Position += (velocity * delta * speed);
             WalkPath();
         }
+        // if (taskBuffer.Peek().Status != TaskStatus.RanToCompletion)
+        // {
+        //     GD.Print("Waiting on that completion,");
+        //     return;
+        // }
+        // else
+        // {
+        //     GD.Print("By jove, did this work???");
+        // }
     }
 
     public override void _PhysicsProcess(float delta)
@@ -412,11 +462,11 @@ public class Pawn : Area2D
             {
                 GD.Print(key.ToString()
                     , ":"
-                    ,needsCollections[key][NeedTraits.CurrentDirection].ToString()
-                    ,","
-                    ,needsCollections[key][NeedTraits.DecayDirection].ToString()
-                    ," - "
-                    ,needStates[key].ToString());
+                    , needsCollections[key][NeedTraits.CurrentDirection].ToString()
+                    , ","
+                    , needsCollections[key][NeedTraits.DecayDirection].ToString()
+                    , " - "
+                    , needStates[key].ToString());
                 needStates[key] += adjustNeed(key, needsCollections[key][NeedTraits.CurrentDirection] == needsCollections[key][NeedTraits.DecayDirection]);
             }
             frameCount = 0;
@@ -438,31 +488,38 @@ public class Pawn : Area2D
                 if (needStates[need] > needsCollections[need][NeedTraits.WorstValue])
                 {
                     return needsCollections[need][NeedTraits.DecayRate] * -1.0f; // Provide a negative number to worsen down.
-                } else {return 0.0f;}
-                
-            } else // if worsening is upwards
+                }
+                else { return 0.0f; }
+
+            }
+            else // if worsening is upwards
             {
                 if (needStates[need] < needsCollections[need][NeedTraits.WorstValue])
                 {
                     return needsCollections[need][NeedTraits.DecayRate];
-                } else {return 0.0f;}
+                }
+                else { return 0.0f; }
             }
-        } else
+        }
+        else
         {
             if (needsCollections[need][NeedTraits.OptimumValue] < needsCollections[need][NeedTraits.WorstValue]) // if improving is downwards
             {
                 if (needStates[need] > needsCollections[need][NeedTraits.OptimumValue])
                 {
                     return needsCollections[need][NeedTraits.DecayRate] * -1.0f; // Provide a negative number to improve down to.
-                } else {return 0.0f;}
-                
-            } else // if improving is upwards
+                }
+                else { return 0.0f; }
+
+            }
+            else // if improving is upwards
             {
                 if (needStates[need] < needsCollections[need][NeedTraits.OptimumValue])
                 {
                     return needsCollections[need][NeedTraits.DecayRate]; // Provide a negative number to worsen down.
-                } else {return 0.0f;}
-                
+                }
+                else { return 0.0f; }
+
             }
         }
     }
