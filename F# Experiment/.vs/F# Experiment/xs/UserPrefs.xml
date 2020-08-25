@@ -1,0 +1,28 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workbench ActiveDocument="GodotFs/Class.fs">
+    <Files>
+      <File FileName="Pawn.cs" Line="4" Column="7" />
+      <File FileName="GodotFs/Component1.fs" Line="1" Column="1" />
+      <File FileName="GodotFs/Class.fs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="F# Experiment" expanded="True">
+            <Node name="F# Experiment" expanded="True" />
+            <Node name="GodotFs" expanded="True">
+              <Node name="Class.fs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.GodotFs FirstBuild="True" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
