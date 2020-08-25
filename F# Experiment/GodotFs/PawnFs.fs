@@ -2,8 +2,11 @@
  
 open Godot
 
-type PawnFs() =
-    inherit Node()
+type PawnFs() as this =
+    inherit Area2D()
+
+    [<Export>]
+    let speed = 200
  
     override this._Ready() = 
         GD.Print("Hello from F#!")

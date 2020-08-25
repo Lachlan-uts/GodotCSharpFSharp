@@ -1,15 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="GodotFs/Component1.fs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="GodotFs/PawnFs.fs">
     <Files>
-      <File FileName="GodotFs/Component1.fs" Line="1" Column="1" />
+      <File FileName="GodotFs/Component1.fs" Line="5" Column="5" />
       <File FileName="GodotFs/PawnFs.fs" Line="1" Column="1" />
+      <File FileName="../C# experiment/PathfindingExperiment/Pawn.cs" Line="1" Column="1" NotebookId="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="F# Experiment" expanded="True">
             <Node name="GodotFs" expanded="True">
-              <Node name="Component1.fs" selected="True" />
+              <Node name="PawnFs.fs" selected="True" />
             </Node>
           </Node>
         </State>
