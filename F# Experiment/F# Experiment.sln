@@ -1,0 +1,27 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "F# Experiment", "F# Experiment.csproj", "{99768F0C-46A4-4862-AB7B-F1E9B0A3D719}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GodotFs", "GodotFs\GodotFs.fsproj", "{0CB947F8-EC14-46B2-AE45-045A4DAFF0F5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Tools|Any CPU = Tools|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99768F0C-46A4-4862-AB7B-F1E9B0A3D719}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99768F0C-46A4-4862-AB7B-F1E9B0A3D719}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99768F0C-46A4-4862-AB7B-F1E9B0A3D719}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99768F0C-46A4-4862-AB7B-F1E9B0A3D719}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99768F0C-46A4-4862-AB7B-F1E9B0A3D719}.Tools|Any CPU.ActiveCfg = Tools|Any CPU
+		{99768F0C-46A4-4862-AB7B-F1E9B0A3D719}.Tools|Any CPU.Build.0 = Tools|Any CPU
+		{0CB947F8-EC14-46B2-AE45-045A4DAFF0F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CB947F8-EC14-46B2-AE45-045A4DAFF0F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CB947F8-EC14-46B2-AE45-045A4DAFF0F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CB947F8-EC14-46B2-AE45-045A4DAFF0F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CB947F8-EC14-46B2-AE45-045A4DAFF0F5}.Tools|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CB947F8-EC14-46B2-AE45-045A4DAFF0F5}.Tools|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+EndGlobal
