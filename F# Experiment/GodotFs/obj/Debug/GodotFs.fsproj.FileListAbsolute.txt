@@ -23,3 +23,8 @@
 /home/vortai/Documents/Uni Work/Honors Godot Creations/F# Experiment/GodotFs/obj/Debug/GodotFs.fsproj.CopyComplete
 /home/vortai/Documents/Uni Work/Honors Godot Creations/F# Experiment/GodotFs/obj/Debug/GodotFs.dll
 /home/vortai/Documents/Uni Work/Honors Godot Creations/F# Experiment/GodotFs/obj/Debug/GodotFs.pdb
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/GodotFs/obj/Debug/GodotFs.fsprojAssemblyReference.cache
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/GodotFs/bin/Debug/GodotFs.pdb
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/GodotFs/obj/Debug/GodotFs.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/GodotFs/obj/Debug/GodotFs.pdb
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/GodotFs/obj/Debug/GodotFs.fsproj.CoreCompileInputs.cache

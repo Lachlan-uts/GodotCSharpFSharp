@@ -7,3 +7,28 @@
 /home/vortai/Documents/Uni Work/Honors Godot Creations/F# Experiment/.mono/temp/obj/Debug/F# Experiment.csproj.CopyComplete
 /home/vortai/Documents/Uni Work/Honors Godot Creations/F# Experiment/.mono/temp/obj/Debug/F# Experiment.dll
 /home/vortai/Documents/Uni Work/Honors Godot Creations/F# Experiment/.mono/temp/obj/Debug/F# Experiment.pdb
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/F# Experiment.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/F# Experiment.pdb
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/GodotFs.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/FSharp.Core.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/GodotFs.pdb
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/FSharp.Core.xml
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/ko/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/cs/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/pt-BR/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/ru/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/tr/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/es/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/ja/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/fr/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/zh-Hans/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/en/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/de/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/it/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/pl/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Debug/zh-Hant/FSharp.Core.resources.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/obj/Debug/F# Experiment.csprojAssemblyReference.cache
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/obj/Debug/F# Experiment.csproj.CoreCompileInputs.cache
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/obj/Debug/F# Experiment.csproj.CopyComplete
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/obj/Debug/F# Experiment.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/obj/Debug/F# Experiment.pdb

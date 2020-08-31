@@ -23,3 +23,7 @@
 /home/vortai/Documents/Uni Work/Honors Godot Creations/F# Experiment/.mono/temp/obj/Tools/F# Experiment.csproj.CopyComplete
 /home/vortai/Documents/Uni Work/Honors Godot Creations/F# Experiment/.mono/temp/obj/Tools/F# Experiment.dll
 /home/vortai/Documents/Uni Work/Honors Godot Creations/F# Experiment/.mono/temp/obj/Tools/F# Experiment.pdb
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/bin/Tools/F# Experiment.pdb
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/obj/Tools/F# Experiment.csprojAssemblyReference.cache
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/obj/Tools/F# Experiment.dll
+/home/vortai/Documents/Uni Work/Honors Godot/F# Experiment/.mono/temp/obj/Tools/F# Experiment.pdb

@@ -1,10 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Pawn.cs" type="Script" id=1]
 [ext_resource path="res://icon.png" type="Texture" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 31.2009
+
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0.494506, 1 ), 0.0, 0.0, 0, 0 ]
 
 [node name="Pawn" type="Area2D"]
 script = ExtResource( 1 )
@@ -16,3 +19,6 @@ texture = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="VisualAid" type="Line2D" parent="."]
+points = PoolVector2Array( 101, 70, 206, 196, 338, 107, 531, 144, 730, 180, 893, 258 )
+width_curve = SubResource( 2 )
+default_color = Color( 0.0431373, 0.196078, 0.945098, 1 )
