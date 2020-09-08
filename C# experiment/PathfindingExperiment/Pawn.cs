@@ -3,7 +3,9 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-public class Pawn : Area2D
+using GodotFs;
+
+public class Pawn : PawnFs
 {
     //Signals first?
     // State Restult Signal

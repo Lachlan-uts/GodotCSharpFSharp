@@ -60,5 +60,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TilemapExperiment\TileMap.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="GodotFs\GodotFs.fsproj">
+      <Project>{21BBE7ED-6AC3-48F5-A196-B8E0E0E216AD}</Project>
+      <Name>GodotFs</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
