@@ -7,6 +7,9 @@ using GodotFs;
 
 public class Pawn : PawnFs
 {
+    [Signal]
+    public delegate void FsSignalTest(string words);
+
     //Signals first?
     // State Restult Signal
     [Signal]
@@ -22,7 +25,7 @@ public class Pawn : PawnFs
     private int needFrameSkip; // This is a magic number to dictate how many frames the loop should skip for doing the need calc
     private int frameCount;
     [Export]
-    private int speed;
+    private int speed = 30;
 
     [Export]
     private Vector2 velocity = new Vector2();
@@ -102,7 +105,7 @@ public class Pawn : PawnFs
     private Dictionary<NeedNames, float> needStates
      = new Dictionary<NeedNames, float>
     {
-        {NeedNames.Rest, 5.0f},
+        {NeedNames.Rest, 7.0f},
         {NeedNames.Boredom, 5.0f}
     };
 
@@ -143,9 +146,11 @@ public class Pawn : PawnFs
     private bool calculateTilePos = false;
 
     private List<Task> taskBuffer;
-    
+
     public override void _Ready()
     {
+        //this.Connect("FsSignalTest", this, "FsSignalFun");
+        //EmitSignal("FsSignalTest", "DID THIS ACTUALLY WORK???");
         taskBuffer = new List<Task>();
         //var actionForm = (name: "string", blocking: true, target)
         base._Ready(); // Ensures the basic ready has completed
@@ -245,6 +250,7 @@ public class Pawn : PawnFs
     // There might be wisdom in changing this from void to a return type of state or task, to help keep track of things though unsure of how to do so currently.
     private void ChooseTask(bool isInTaskCurrently=false) // I changed the name because the pawn might remain in a given task/state upon evaluation
     {
+        
         var chosenNeed = EvaluateNeeds(needStates, isInTaskCurrently);
 
         //Ideally I should use some sort of match function here but I'm too lazt atm
@@ -337,7 +343,6 @@ public class Pawn : PawnFs
             return targetDestination;
         }
     }
-
     //Setting the needs rates should not be within an "evaluation" method, only those which actually cause an "action"
     // This function takes a random area and returns a valid point within it.
     private Vector2 ChooseWanderDestination(Rect2 possibleArea)
@@ -345,13 +350,17 @@ public class Pawn : PawnFs
         RandomNumberGenerator rand = new RandomNumberGenerator();
         rand.Randomize();
         int[] walkableTiles = new int[] { 0 }; //hardcoded garbo for now, think more about it later
+        GD.Print("ITS A DOING IT!");
+
         // point should now be somewhere within the possible area
         Vector2 point = new Vector2
             (
             rand.RandfRange(possibleArea.Position.x, possibleArea.End.x)
             , rand.RandfRange(possibleArea.Position.y, possibleArea.End.y)
             );
-        return pathProvider.GetValidTile(point, walkableTiles);
+        Vector2 fSharpResult = ChooseWanderDest(possibleArea, walkableTiles);
+        Vector2 cSharpResult = pathProvider.GetValidTile(point, walkableTiles);
+        return fSharpResult;
     }
 
     // I really need that job buffer/queue working but I don't think I have the time.

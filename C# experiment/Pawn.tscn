@@ -15,7 +15,6 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_group_": true
 }
-speed = 30
 wanderOriginOffset = Vector2( -50, -50 )
 wanderRectSize = Vector2( 100, 100 )
 
