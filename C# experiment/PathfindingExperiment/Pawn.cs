@@ -349,6 +349,7 @@ public class Pawn : PawnFs
     {
         RandomNumberGenerator rand = new RandomNumberGenerator();
         rand.Randomize();
+        //rand.Seed.ToString();
         int[] walkableTiles = new int[] { 0 }; //hardcoded garbo for now, think more about it later
         GD.Print("ITS A DOING IT!");
 

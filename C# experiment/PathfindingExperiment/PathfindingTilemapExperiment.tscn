@@ -26,20 +26,12 @@ zoom = Vector2( 0.4, 0.4 )
 
 [node name="Pawn" parent="." instance=ExtResource( 5 )]
 position = Vector2( 34.3146, 35.0139 )
-wanderOriginOffset = Vector2( 0, 0 )
-wanderRectSize = Vector2( 0, 0 )
 
 [node name="Pawn2" parent="." instance=ExtResource( 5 )]
 position = Vector2( 195.275, 59.5974 )
-wanderOriginOffset = Vector2( 0, 0 )
-wanderRectSize = Vector2( 0, 0 )
 
 [node name="Pawn3" parent="." instance=ExtResource( 5 )]
 position = Vector2( 117.007, 204.768 )
-wanderOriginOffset = Vector2( 0, 0 )
-wanderRectSize = Vector2( 0, 0 )
 
 [node name="Pawn4" parent="." instance=ExtResource( 5 )]
 position = Vector2( 344.453, 135.713 )
-wanderOriginOffset = Vector2( 0, 0 )
-wanderRectSize = Vector2( 0, 0 )
