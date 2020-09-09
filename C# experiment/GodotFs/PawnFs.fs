@@ -3,9 +3,12 @@
 open Godot
 open PathProvider
 
-type DecayDirection = Up | Down
+// Porting enums from C# to F# to enable F# calling interopt
+type NeedNames = Rest = 0 | Boredom = 1
+type NeedTraits = OptimumValue = 0 | WorstValue = 1 | DecayDirection = 2 | DecayRate = 3 | CurrentDirection = 4
 
-//going to start drafting out the need type stuff
+// Building the custom types for a purely F# need system
+type DecayDirection = Up | Down
 type Need =
     {
         CurrentValue: float;

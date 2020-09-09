@@ -82,22 +82,22 @@ public class Pawn : PawnFs
 
     // Want to devise how the need system works, which should be the primary system to triger states.
     // The common characteristics of the needs
-    enum NeedTraits
-    {
-        // Name, // Unecessary I think
-        OptimumValue,
-        WorstValue,
-        //StepPoints, // Won't work as I want it to be an array or list
-        DecayDirection,
-        DecayRate,
-        CurrentDirection
-    }
+    //enum NeedTraits
+    //{
+    //    // Name, // Unecessary I think
+    //    OptimumValue,
+    //    WorstValue,
+    //    //StepPoints, // Won't work as I want it to be an array or list
+    //    DecayDirection,
+    //    DecayRate,
+    //    CurrentDirection
+    //}
     // The names of the various needs
-    enum NeedNames
-    {
-        Rest,
-        Boredom
-    }
+    //enum NeedNames
+    //{
+    //    Rest,
+    //    Boredom
+    //}
 
     //A tracker of the current targeted need/state?
     private NeedNames currentTargetNeed = NeedNames.Boredom;
