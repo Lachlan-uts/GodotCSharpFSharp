@@ -21,7 +21,8 @@ type PawnFs() as self =
     inherit Area2D()
 
     let rest =
-        { CurrentValue = 6.0;
+        {
+        CurrentValue = 6.0;
         Max = 10.0;
         Min = 0.0;
         Decaying = true;
@@ -29,6 +30,7 @@ type PawnFs() as self =
         ChangeRate = 0.1;
         }
 
+    let mutable mutRest = rest
     //let fsFun = GD.Print("called a FS made function")
     
 
@@ -102,9 +104,10 @@ type PawnFs() as self =
     //abstract member FsSignalFun: string -> unit
     //default this.FsSignalFun words = GD.Print(words)
 
-    //default this.UpdateTest =
-        //let blah = updateNeed rest
-        //GD.Print(rest.CurrentValue.ToString())
+    abstract member UpdateNeedTest: string -> unit
+    default this.UpdateNeedTest _ =
+        mutRest <- updateNeed mutRest
+        GD.Print(mutRest.CurrentValue.ToString())
 
 
 

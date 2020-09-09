@@ -416,6 +416,7 @@ public class Pawn : PawnFs
         frameCount++;
         if (frameCount == needFrameSkip)
         {
+            UpdateNeedTest("wah");
             //I'm going to end the recording here for now, I need to take a quick walk to come up with a better idea, cause this is just causing too many headaches...
 
             // So this I think is where the problem is. I just need to make sure it works correctly.

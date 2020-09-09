@@ -4,8 +4,11 @@
 /home/vortai/Documents/Uni Work/Honors Godot Creations/C# experiment/.mono/temp/obj/Tools/C# Experiment.csproj.CoreCompileInputs.cache
 /home/vortai/Documents/Uni Work/Honors Godot Creations/C# experiment/.mono/temp/obj/Tools/C# Experiment.dll
 /home/vortai/Documents/Uni Work/Honors Godot Creations/C# experiment/.mono/temp/obj/Tools/C# Experiment.pdb
-/home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/C# Experiment.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/C# Experiment.pdb
+/home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/obj/Tools/C# Experiment.csprojAssemblyReference.cache
+/home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/obj/Tools/C# Experiment.dll
+/home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/obj/Tools/C# Experiment.pdb
+/home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/C# Experiment.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/GodotFs.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/FSharp.Core.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/GodotFs.pdb
@@ -24,8 +27,5 @@
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/it/FSharp.Core.resources.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/pl/FSharp.Core.resources.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/zh-Hant/FSharp.Core.resources.dll
-/home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/obj/Tools/C# Experiment.csprojAssemblyReference.cache
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/obj/Tools/C# Experiment.csproj.CoreCompileInputs.cache
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/obj/Tools/C# Experiment.csproj.CopyComplete
-/home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/obj/Tools/C# Experiment.dll
-/home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/obj/Tools/C# Experiment.pdb
