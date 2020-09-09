@@ -7,6 +7,7 @@ using GodotFs;
 
 public class Pawn : PawnFs
 {
+
     [Signal]
     public delegate void FsSignalTest(string words);
 
@@ -79,25 +80,6 @@ public class Pawn : PawnFs
     private Vector2 wanderOriginOffset;
     [Export]
     private Vector2 wanderRectSize;
-
-    // Want to devise how the need system works, which should be the primary system to triger states.
-    // The common characteristics of the needs
-    //enum NeedTraits
-    //{
-    //    // Name, // Unecessary I think
-    //    OptimumValue,
-    //    WorstValue,
-    //    //StepPoints, // Won't work as I want it to be an array or list
-    //    DecayDirection,
-    //    DecayRate,
-    //    CurrentDirection
-    //}
-    // The names of the various needs
-    //enum NeedNames
-    //{
-    //    Rest,
-    //    Boredom
-    //}
 
     //A tracker of the current targeted need/state?
     private NeedNames currentTargetNeed = NeedNames.Boredom;
@@ -413,10 +395,11 @@ public class Pawn : PawnFs
 
     public override void _PhysicsProcess(float delta)
     {
+        base._PhysicsProcess(delta);
         frameCount++;
         if (frameCount == needFrameSkip)
         {
-            UpdateNeedTest("wah");
+            //UpdateNeedTest("wah");
             //I'm going to end the recording here for now, I need to take a quick walk to come up with a better idea, cause this is just causing too many headaches...
 
             // So this I think is where the problem is. I just need to make sure it works correctly.

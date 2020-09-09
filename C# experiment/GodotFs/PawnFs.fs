@@ -12,8 +12,8 @@ type DecayDirection = Up | Down
 type Need =
     {
         CurrentValue: float;
-        Max: float;
-        Min: float;
+        Maxi: float;
+        Mini: float;
         Decaying: bool;
         DecayDirection: DecayDirection;
         ChangeRate: float;
@@ -26,8 +26,8 @@ type PawnFs() as self =
     let rest =
         {
         CurrentValue = 6.0;
-        Max = 10.0;
-        Min = 0.0;
+        Maxi = 10.0;
+        Mini = 0.0;
         Decaying = true;
         DecayDirection = Down;
         ChangeRate = 0.1;
@@ -54,9 +54,9 @@ type PawnFs() as self =
     let allowValueChange (need : Need) =
         match (need.DecayDirection, need.Decaying) with
         | (Up,true) | (Down,false) ->
-            doChange need.DecayDirection need.Decaying need.ChangeRate need.CurrentValue <= need.Max
+            doChange need.DecayDirection need.Decaying need.ChangeRate need.CurrentValue <= need.Maxi
         | _ ->
-            doChange need.DecayDirection need.Decaying need.ChangeRate need.CurrentValue >= need.Min
+            doChange need.DecayDirection need.Decaying need.ChangeRate need.CurrentValue >= need.Mini
 
     //let getTarget need dir =
         //match dir with
@@ -66,16 +66,17 @@ type PawnFs() as self =
         match (need.DecayDirection, need.Decaying) with
         | (Up,true) | (Down,false) ->
             let newValue = need.CurrentValue + need.ChangeRate
-            if newValue > need.Max then
-                {need with CurrentValue = need.Max}
+            if newValue > need.Maxi then
+                {need with CurrentValue = need.Maxi}
             else  
                 {need with CurrentValue = newValue}
         | _ ->
             let newValue = need.CurrentValue - need.ChangeRate
-            if newValue < need.Min then
-                {need with CurrentValue = need.Max}
+            if newValue < need.Mini then
+                {need with CurrentValue = need.Mini}
             else  
                 {need with CurrentValue = newValue}
+
 
     //let update msg (need: Need) =
         //let { currentValue = cv } = need
@@ -107,13 +108,15 @@ type PawnFs() as self =
     //abstract member FsSignalFun: string -> unit
     //default this.FsSignalFun words = GD.Print(words)
 
-    abstract member UpdateNeedTest: string -> unit
-    default this.UpdateNeedTest _ =
+    override this._PhysicsProcess(delta) =
         mutRest <- updateNeed mutRest
         GD.Print(mutRest.CurrentValue.ToString())
 
-
-
+    //abstract member UpdateNeedTest: string -> unit
+    //default this.UpdateNeedTest _ =
+        ////mutRest <- updateNeed mutRest
+        //GD.Print(mutRest.CurrentValue.ToString())
+        
     abstract member ChooseWanderDest: Rect2 -> int[] -> Vector2
     default this.ChooseWanderDest (pArea : Rect2) (validTiles : int[]) =
         GD.Print("doing it")
