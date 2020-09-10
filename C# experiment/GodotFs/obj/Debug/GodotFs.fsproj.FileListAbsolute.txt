@@ -17,7 +17,6 @@
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/GodotFs/bin/Debug/ja/FSharp.Core.resources.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/GodotFs/bin/Debug/fr/FSharp.Core.resources.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/GodotFs/bin/Debug/zh-Hans/FSharp.Core.resources.dll
-/home/vortai/Documents/Uni Work/Honors Godot/C# experiment/GodotFs/bin/Debug/en/FSharp.Core.resources.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/GodotFs/bin/Debug/de/FSharp.Core.resources.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/GodotFs/bin/Debug/it/FSharp.Core.resources.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/GodotFs/bin/Debug/pl/FSharp.Core.resources.dll

@@ -37,7 +37,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
     <Reference Include="FSharp.Core">
-      <HintPath>..\packages\FSharp.Core.4.3.3\lib\net45\FSharp.Core.dll</HintPath>
+      <HintPath>..\packages\FSharp.Core.4.7.2\lib\net45\FSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="GodotSharp">
       <HintPath>..\.mono\assemblies\Debug\GodotSharp.dll</HintPath>
@@ -47,9 +47,10 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Component1.fs" />
     <Compile Include="Script.fsx" />
-    <None Include="packages.config" />
+    <Compile Include="GodotNodeUtils.fs" />
     <Compile Include="PathfindingFs.fs" />
     <Compile Include="PawnFs.fs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(FSharpTargetsPath)" />
 </Project>

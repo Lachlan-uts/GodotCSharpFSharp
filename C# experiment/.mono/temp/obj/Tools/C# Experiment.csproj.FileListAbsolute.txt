@@ -22,7 +22,6 @@
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/ja/FSharp.Core.resources.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/fr/FSharp.Core.resources.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/zh-Hans/FSharp.Core.resources.dll
-/home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/en/FSharp.Core.resources.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/de/FSharp.Core.resources.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/it/FSharp.Core.resources.dll
 /home/vortai/Documents/Uni Work/Honors Godot/C# experiment/.mono/temp/bin/Tools/pl/FSharp.Core.resources.dll

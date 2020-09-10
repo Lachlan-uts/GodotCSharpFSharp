@@ -1,11 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="TilemapExperiment/TileMap.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="GodotFs/PawnFs.fs">
     <Files>
       <File FileName="TilemapExperiment/TileMap.cs" Line="26" Column="40" />
-      <File FileName="GodotFs/PawnFs.fs" Line="8" Column="17" />
-      <File FileName="GodotFs/PathfindingFs.fs" Line="16" Column="44" />
-      <File FileName="PathfindingExperiment/Pawn.cs" Line="91" Column="21" NotebookId="1" />
-      <File FileName="PathfindingExperiment/PathfindingTilemapExperiment.cs" Line="58" Column="32" NotebookId="1" />
+      <File FileName="GodotFs/PawnFs.fs" Line="40" Column="24" />
+      <File FileName="GodotFs/PathfindingFs.fs" Line="6" Column="9" />
+      <File FileName="PathfindingExperiment/PathfindingTilemapExperiment.cs" Line="60" Column="25" NotebookId="1" />
+      <File FileName="GodotFs/GodotNodeUtils.fs" Line="20" Column="13" NotebookId="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -13,11 +13,12 @@
           <Node name="C# Experiment" expanded="True">
             <Node name="C# Experiment" expanded="True">
               <Node name="PathfindingExperiment" expanded="True" />
-              <Node name="TilemapExperiment" expanded="True">
-                <Node name="TileMap.cs" selected="True" />
-              </Node>
+              <Node name="TilemapExperiment" expanded="True" />
             </Node>
-            <Node name="GodotFs" expanded="True" />
+            <Node name="GodotFs" expanded="True">
+              <Node name="References" expanded="True" />
+              <Node name="PawnFs.fs" selected="True" />
+            </Node>
           </Node>
         </State>
       </Pad>
