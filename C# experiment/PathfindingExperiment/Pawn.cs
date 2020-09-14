@@ -395,10 +395,12 @@ public class Pawn : PawnFs
 
     public override void _PhysicsProcess(float delta)
     {
-        base._PhysicsProcess(delta);
         frameCount++;
         if (frameCount == needFrameSkip)
         {
+            // Going to call the F# code here cause I can't think of an idiomatic 
+            // way to do the 60 frame skip trick idiomatically in F#
+            base._PhysicsProcess(delta);
             //UpdateNeedTest("wah");
             //I'm going to end the recording here for now, I need to take a quick walk to come up with a better idea, cause this is just causing too many headaches...
 

@@ -47,6 +47,17 @@ type PawnFs() as self =
 
     //let wot = pathProviderNode.Value.saySomething
 
+    let changeNeedDir state (need: Need) =
+        match state with
+        | x when need.Decaying = x -> need
+        | _ -> {need with Decaying = state}
+
+    let changeNeedMag rate (need: Need) =
+        {need with ChangeRate = rate}
+
+    let changeNeedDirAndMag state rate (need: Need) =
+        changeNeedDir state need |> changeNeedMag rate
+
     let updateNeed (need: Need) =
         match (need.DecayDirection, need.Decaying) with
         | (Up,true) | (Down,false) ->
@@ -63,9 +74,19 @@ type PawnFs() as self =
                 {need with CurrentValue = newValue}
 
 
-    
+    let bounce (need: Need) =
+        match (need.CurrentValue, need.DecayDirection, need.Decaying) with
+        | (x, Up, true) | (x, Down, false) when x = need.Maxi ->
+            changeNeedDir (not need.Decaying) need
+        | (x, Up, false) | (x, Down, true) when x = need.Mini ->
+            changeNeedDir (not need.Decaying) need
+        | _ -> need
+
+
+    // Currently only being called once every 60 frames or once per second.
     override this._PhysicsProcess(delta) =
         mutRest <- updateNeed mutRest
+        mutRest <- bounce mutRest
         GD.Print(mutRest.CurrentValue.ToString())
 
 
@@ -75,6 +96,8 @@ type PawnFs() as self =
     //default this.UpdateNeedTest _ =
         ////mutRest <- updateNeed mutRest
         //GD.Print(mutRest.CurrentValue.ToString())
+
+    //abstract memeber ChangeTaskAdjustNeeds: Need
         
     abstract member ChooseWanderDest: Rect2 -> int[] -> Vector2
     default this.ChooseWanderDest (pArea : Rect2) (validTiles : int[]) =

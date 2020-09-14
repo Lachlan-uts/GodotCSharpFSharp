@@ -1,11 +1,10 @@
-﻿<Properties>
+﻿<Properties StartupConfiguration="{22EF16CC-BD52-4980-AD3B-63044CE93923}|Launch">
+  <MonoDevelop.Ide.ItemProperties.C_223_220Experiment PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="GodotFs/PawnFs.fs">
     <Files>
-      <File FileName="TilemapExperiment/TileMap.cs" Line="26" Column="40" />
-      <File FileName="GodotFs/PawnFs.fs" Line="40" Column="24" />
+      <File FileName="GodotFs/PawnFs.fs" Line="57" Column="9" />
       <File FileName="GodotFs/PathfindingFs.fs" Line="6" Column="9" />
-      <File FileName="PathfindingExperiment/PathfindingTilemapExperiment.cs" Line="60" Column="25" NotebookId="1" />
-      <File FileName="GodotFs/GodotNodeUtils.fs" Line="20" Column="13" NotebookId="1" />
+      <File FileName="PathfindingExperiment/Pawn.cs" Line="430" Column="29" NotebookId="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
