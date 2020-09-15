@@ -51,6 +51,10 @@
     <Compile Include="PathfindingFs.fs" />
     <Compile Include="PawnFs.fs" />
     <None Include="packages.config" />
+    <Compile Include="Logic Modules\NeedSystem.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logic Modules\" />
   </ItemGroup>
   <Import Project="$(FSharpTargetsPath)" />
 </Project>

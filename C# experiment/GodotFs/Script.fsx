@@ -3,3 +3,4 @@
 
 #load "Component1.fs"
 open GodotFs
+let test = "boo"

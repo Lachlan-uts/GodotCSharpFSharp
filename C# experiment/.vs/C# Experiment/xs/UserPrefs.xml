@@ -1,10 +1,11 @@
-﻿<Properties StartupConfiguration="{22EF16CC-BD52-4980-AD3B-63044CE93923}|Launch">
+﻿<Properties StartupConfiguration="{22EF16CC-BD52-4980-AD3B-63044CE93923}|Attach">
   <MonoDevelop.Ide.ItemProperties.C_223_220Experiment PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="GodotFs/PawnFs.fs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="GodotFs/Logic Modules/NeedSystem.fs">
     <Files>
-      <File FileName="GodotFs/PawnFs.fs" Line="57" Column="9" />
+      <File FileName="GodotFs/PawnFs.fs" Line="101" Column="9" />
       <File FileName="GodotFs/PathfindingFs.fs" Line="6" Column="9" />
-      <File FileName="PathfindingExperiment/Pawn.cs" Line="430" Column="29" NotebookId="1" />
+      <File FileName="PathfindingExperiment/Pawn.cs" Line="263" Column="1" NotebookId="1" />
+      <File FileName="GodotFs/Logic Modules/NeedSystem.fs" Line="48" Column="27" NotebookId="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -16,13 +17,16 @@
             </Node>
             <Node name="GodotFs" expanded="True">
               <Node name="References" expanded="True" />
-              <Node name="PawnFs.fs" selected="True" />
+              <Node name="Logic Modules" expanded="True">
+                <Node name="NeedSystem.fs" selected="True" />
+              </Node>
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.GodotFs PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
