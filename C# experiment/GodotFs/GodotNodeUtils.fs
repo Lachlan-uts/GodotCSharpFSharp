@@ -16,5 +16,5 @@ type Navigation2D with
     /// <summary>
     /// words
     /// </summary>
-    member this.saySomething (words : string) =
-        "wot"
+    member this.saySomething<'a when 'a :> Navigation2D> (words : string) =
+        this.GetParent() :?> 'a
