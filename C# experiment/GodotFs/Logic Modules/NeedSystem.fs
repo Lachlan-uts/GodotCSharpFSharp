@@ -50,6 +50,16 @@ let updateNeed (need: Need) =
 let updateNeedMap (needMap : Map<NeedName,Need>) =
     Map.map (fun (name : NeedName) need -> updateNeed need) needMap
 
+let mapBounce needMap =
+    Map.map (fun (name : NeedName) (need : Need) ->
+        match need.CurrentValue with
+        | x when x = need.Maxi ->
+            {need with Gaining = (not need.Gaining)}
+        | x when x = need.Mini ->
+            {need with Gaining = (not need.Gaining)}
+        | _ -> need
+    ) needMap
+
 // Defaults for a given "class" to use
 let defaultRest =
     {

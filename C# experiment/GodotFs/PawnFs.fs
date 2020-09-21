@@ -94,6 +94,7 @@ type PawnFs() as self =
         mutRest <- bounce mutRest
         GD.Print(mutRest.CurrentValue.ToString())
         mutNeedMap <- updateNeedMap mutNeedMap
+        mutNeedMap <- mapBounce mutNeedMap
         Map.iter (fun (name : NeedName) (need : NeedSystem.Need ) -> GD.Print(need.CurrentValue.ToString())) mutNeedMap
         
 
