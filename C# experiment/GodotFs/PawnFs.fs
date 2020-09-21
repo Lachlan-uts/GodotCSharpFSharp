@@ -3,6 +3,7 @@
 open Godot
 open PathProvider
 open GodotNodeUtils
+open NeedSystem
 
 // Porting enums from C# to F# to enable F# calling interopt
 type NeedNames = Rest = 0 | Boredom = 1
@@ -23,6 +24,10 @@ type Need =
 
 type PawnFs() as self =
     inherit Area2D()
+
+    let startingNeeds = NeedSystem.defaultMapOfNeeds
+
+    let mutable mutNeedMap = startingNeeds
 
     let rest =
         {
@@ -88,6 +93,9 @@ type PawnFs() as self =
         mutRest <- updateNeed mutRest
         mutRest <- bounce mutRest
         GD.Print(mutRest.CurrentValue.ToString())
+        mutNeedMap <- updateNeedMap mutNeedMap
+        Map.iter (fun (name : NeedName) (need : NeedSystem.Need ) -> GD.Print(need.CurrentValue.ToString())) mutNeedMap
+        
 
 
     // Abstract (C# callable) Methods/functions

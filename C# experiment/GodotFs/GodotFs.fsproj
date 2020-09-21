@@ -47,11 +47,11 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Component1.fs" />
     <Compile Include="Script.fsx" />
+    <Compile Include="Logic Modules\NeedSystem.fs" />
     <Compile Include="GodotNodeUtils.fs" />
     <Compile Include="PathfindingFs.fs" />
     <Compile Include="PawnFs.fs" />
     <None Include="packages.config" />
-    <Compile Include="Logic Modules\NeedSystem.fs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic Modules\" />
