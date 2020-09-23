@@ -67,8 +67,21 @@ let mapBounce needMap =
 let getPriorityNeed (needMap : Map<NeedName,Need>) currentNeed =
     match currentNeed with
     // When none, we can just use any need as a starting value
-    | None -> Map.fold (fun x y z -> if x > z.CurrentValue then z.CurrentValue else x) (needMap |> Seq.head).Value.CurrentValue needMap 
-    | _ -> Map.fold (fun x y z -> if x-2.0 > z.CurrentValue then z.CurrentValue else x) (needMap.TryFind(currentNeed.Value).Value.CurrentValue) needMap // Make the existing value slightly "stickier"
+    | None -> 
+        let increTup = (needMap |> Seq.head) |> (fun x -> (x.Key, x.Value.CurrentValue))
+        //Map.fold (fun (x1,x2) y z -> if x2 > z.CurrentValue then (x1,z.CurrentValue)else x) increTup needMap 
+        Map.fold (fun x y z -> match x with
+                                | (x1, _) when x1 = y -> x
+                                | (x1, x2) when x2 > z.CurrentValue -> (x1,z.CurrentValue)
+                                | _ -> x
+                    ) increTup needMap
+    | Some a -> 
+        Map.fold (fun x y z -> match x with
+                                | (x1, _) when x1 = y -> x
+                                | (x1, x2) when x2 > z.CurrentValue -> (x1,z.CurrentValue)
+                                | _ -> x
+                    ) (a, (needMap.TryFind(a).Value.CurrentValue)) needMap
+    //| _ -> Map.fold (fun x y z -> if x-2.0 > z.CurrentValue then z.CurrentValue else x) (needMap.TryFind(currentNeed.Value).Value.CurrentValue) needMap // Make the existing value slightly "stickier"
 
 /// need a change task or task change needs or somesuch function now
 
