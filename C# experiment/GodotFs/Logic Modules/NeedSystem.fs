@@ -4,7 +4,7 @@ type DecayDirection = Up | Down
 
 type NeedName = Rest | Boredom
 
-type Gaining = bool
+//type Gaining = bool
 
 type Need =
     {
@@ -12,13 +12,18 @@ type Need =
         CurrentValue: float;
         Maxi: float; // also the optimum value
         Mini: float; // also the worst value
-        GainState: Gaining;
+        GainState: bool;
         DecayDirection: DecayDirection; // Only a hint for the visual system
         ChangeRate: float;
     }
 // update method
 // adjust methods
 // evaluate method
+
+let changeNeedDirOpt newDir (need : Need Option)=
+    match need with
+        | None -> None
+        | Some x -> Some {x with GainState=newDir}
 
 let changeNeedDir state (need: Need) =
     match state with
@@ -82,6 +87,8 @@ let getPriorityNeed (needMap : Map<NeedName,Need>) currentNeed =
                                 | _ -> x
                     ) (a, (needMap.TryFind(a).Value.CurrentValue)) needMap
     //| _ -> Map.fold (fun x y z -> if x-2.0 > z.CurrentValue then z.CurrentValue else x) (needMap.TryFind(currentNeed.Value).Value.CurrentValue) needMap // Make the existing value slightly "stickier"
+
+
 
 /// need a change task or task change needs or somesuch function now
 
@@ -149,14 +156,23 @@ module TaskSystem =
     let defaultMapOfTasks = Map.empty.Add(Wander,wander).Add(Nap,nap).Add(Chinwag,chinwag)
 
     let taskToList taskNeeds =
-        List.map (fun x -> (x,true)) taskNeeds.Gaining |> List.append (List.map (fun x -> (x,false)) taskNeeds.Decaying)
+        List.map (fun x -> (x, true)) taskNeeds.Gaining |> List.append (List.map (fun x -> (x,false)) taskNeeds.Decaying)
 
     let getTaskFromPriorityNeed tMap need =
         // this map now only contains tasks with the given need as the head of the gaining list
         //(Map.filter (fun k v -> v.Gaining.Head = need) tMap)
         Map.tryPick (fun k v -> if v.Gaining.Head = need then Some k else None) tMap
 
+    let change key f map =
+        Map.tryFind key map
+        |> f
+        |> function
+            | Some v -> Map.add key v map
+            | None -> Map.remove key map
 
+    let foldSol tupList needMap =
+        List.fold (fun nm (k,v) -> change k (changeNeedDirOpt v) nm) needMap tupList
+        //List.fold (fun nm (k,v) -> if Map.containsKey k nm then Map.add k v nm else nm) needMap tupList
 
     let changeTask needMap newTask =
         //Using a task I need to operate on the needs, making them gain or decay
