@@ -88,7 +88,7 @@ let getPriorityNeed (needMap : Map<NeedName,Need>) currentNeed =
 // Defaults for a given "class" to use
 let defaultRest =
     {
-        CurrentValue = 6.0;
+        CurrentValue = 8.0;
         Maxi = 10.0;
         Mini = 0.0;
         GainState = true;
@@ -111,7 +111,7 @@ let defaultMapOfNeeds = Map.empty.Add(Rest,defaultRest).Add(Boredom,defaultBored
 /// Going to start working on the task system now. I'm not sure if it should be a seperate module, cause it'd almost have to open this module regardless...
 /// So I'm just going to start work here and then pull it out later if I decide it would look better like that
 module TaskSystem =
-    type TaskNames = Wander | Nap
+    type TaskNames = Wander | Nap | Chinwag
 
     type TaskNeeds =
         {
@@ -125,6 +125,10 @@ module TaskSystem =
         | Completed
 
     // Now I think I'll make a list of all the tasks eventually but I'll start by declaring them discretely
+
+    // I don't know if this is poor form or not idiomatic
+    // but due to lists always being ordered, even when their values arn't comparable
+    // for this priority need, I just just grab the head of the list.
 
     let wander =
         {
@@ -142,6 +146,28 @@ module TaskSystem =
             Decaying = []
         }
 
+    let defaultMapOfTasks = Map.empty.Add(Wander,wander).Add(Nap,nap).Add(Chinwag,chinwag)
+
+    let taskToList taskNeeds =
+        List.map (fun x -> (x,true)) taskNeeds.Gaining |> List.append (List.map (fun x -> (x,false)) taskNeeds.Decaying)
+
+    let getTaskFromPriorityNeed tMap need =
+        // this map now only contains tasks with the given need as the head of the gaining list
+        //(Map.filter (fun k v -> v.Gaining.Head = need) tMap)
+        Map.tryPick (fun k v -> if v.Gaining.Head = need then Some k else None) tMap
+
+
+
     let changeTask needMap newTask =
+        //Using a task I need to operate on the needs, making them gain or decay
+        //I think I'll try to do it in stages.
+        
         needMap
 
+        //let sNeedList = List.sortBy (fun (_,y) -> -y) ((Map.map (fun k v -> v.CurrentValue) defaultMapOfNeeds) |> Map.toList)
+
+        //so I realised like 5 minutes after the last recording that putting a function in brackets makes it a partial function, so the pipe then works correctly!
+        //like below
+        //(Map.map (fun k v -> v.CurrentValue) defaultMapOfNeeds) |> Map.toList |> (List.sortBy (fun (_,y) -> y))
+
+            
