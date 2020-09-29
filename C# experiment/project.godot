@@ -20,7 +20,6 @@ config/icon="res://icon.png"
 
 [mono]
 
-debugger_agent/wait_for_debugger=true
 debugger_agent/wait_timeout=10000
 
 [rendering]

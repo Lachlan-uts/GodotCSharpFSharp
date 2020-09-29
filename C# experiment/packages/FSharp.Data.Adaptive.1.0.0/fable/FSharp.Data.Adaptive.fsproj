@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.1</TargetFrameworks>
+    <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\bin\Debug\</OutputPath>
+    <DocumentationFile>..\..\bin\Debug\netstandard2.0\FSharp.Data.Adaptive.XML</DocumentationFile>
+    <DefineConstants>TRACE; DEBUG</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\bin\Release</OutputPath>
+    <DocumentationFile>..\..\bin\Release\netstandard2.0\FSharp.Data.Adaptive.XML</DocumentationFile>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="ShallowEquality.fs" />
+    <Compile Include="Equality.fs" />
+    <Compile Include="FableHelpers.fs" />
+	<Compile Include="Datastructures\HashCollections.fs" />
+	<Compile Include="Datastructures\Operations.fs" />
+	<Compile Include="Datastructures\Index.fsi" /> 
+	<Compile Include="Datastructures\Index.fs" />
+	<Compile Include="Datastructures\MapExt.fs" />
+	<Compile Include="Datastructures\IndexList.fs" />
+	<Compile Include="Datastructures\HashSetDelta.fs" />
+	<Compile Include="Datastructures\HashMapDelta.fs" />
+	<Compile Include="Datastructures\IndexListDelta.fs" />
+	<Compile Include="Datastructures\Deltas.fs" />
+	<Compile Include="Datastructures\MultiSetMap.fs" />
+	<Compile Include="Utilities\Utilities.fs" />
+	<Compile Include="Utilities\PriorityQueue.fs" />
+	<Compile Include="Utilities\Cache.fs" />
+	<Compile Include="Core\Core.fs" />
+	<Compile Include="Core\Transaction.fs" />
+	<Compile Include="Core\AdaptiveToken.fs" />
+	<Compile Include="Core\AdaptiveObject.fs" />
+	<Compile Include="Core\Callbacks.fs" />
+	<Compile Include="AdaptiveValue\AdaptiveValue.fsi" /> 
+	<Compile Include="AdaptiveValue\AdaptiveValue.fs" /> 
+	<Compile Include="AdaptiveValue\AdaptiveReduction.fsi" /> 
+	<Compile Include="AdaptiveValue\AdaptiveReduction.fs" /> 
+	<Compile Include="Traceable\AbstractVal.fs" />
+	<Compile Include="Traceable\Traceable.fs" />
+	<Compile Include="Traceable\Instances.fs" />
+	<Compile Include="Traceable\History.fs" />
+	<Compile Include="Traceable\CountingHashSet.fs" />
+	<Compile Include="AdaptiveHashSet\AdaptiveHashSet.fsi" /> 
+	<Compile Include="AdaptiveHashSet\AdaptiveHashSet.fs" />
+	<Compile Include="AdaptiveHashSet\ChangeableHashSet.fsi" /> 
+	<Compile Include="AdaptiveHashSet\ChangeableHashSet.fs" />
+	<Compile Include="AdaptiveHashMap\AdaptiveHashMap.fsi" /> 
+	<Compile Include="AdaptiveHashMap\AdaptiveHashMap.fs" />
+	<Compile Include="AdaptiveHashMap\ChangeableHashMap.fsi" /> 
+	<Compile Include="AdaptiveHashMap\ChangeableHashMap.fs" />
+	<Compile Include="AdaptiveIndexList\AdaptiveIndexList.fsi" /> 
+	<Compile Include="AdaptiveIndexList\AdaptiveIndexList.fs" />
+	<Compile Include="AdaptiveIndexList\ChangeableIndexList.fsi" /> 
+	<Compile Include="AdaptiveIndexList\ChangeableIndexList.fs" />
+	<Compile Include="CollectionExtensions.fs" />
+	<Compile Include="EvaluationCallbackExtensions.fs" />
+	<Compile Include="ComputationExpressions.fs" />
+	<Compile Include="AdaptifyHelpers.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- 
+        This PackageReference makes fable-splitter work and doesn't affect the built dll (validated using ILSpy).
+        Ideally we would have something like Condition="'$(FABLE)' != ''" here but this doesn'T seem to exist.
+    -->
+    <PackageReference Include="Fable.Core" Version="3.0.0" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

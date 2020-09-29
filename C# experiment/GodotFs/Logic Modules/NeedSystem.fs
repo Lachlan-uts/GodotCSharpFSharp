@@ -37,6 +37,7 @@ let changeNeedDirAndMag state rate (need: Need) =
     changeNeedDir state need |> changeNeedMag rate
 
 /// This is for a single need, will need adjustment for use with the map
+/// This provides a "tick" for incrementing a needs value.
 let updateNeed (need: Need) =
     match need.GainState with
     | true when need.CurrentValue <> need.Maxi ->
@@ -118,6 +119,7 @@ let defaultMapOfNeeds = Map.empty.Add(Rest,defaultRest).Add(Boredom,defaultBored
 /// Going to start working on the task system now. I'm not sure if it should be a seperate module, cause it'd almost have to open this module regardless...
 /// So I'm just going to start work here and then pull it out later if I decide it would look better like that
 module TaskSystem =
+
     type TaskNames = Wander | Nap | Chinwag
 
     type TaskNeeds =
@@ -130,6 +132,12 @@ module TaskSystem =
         | Started
         | InProgress
         | Completed
+
+    // Could be used to build a persistent list of tasks
+    type TaskQ =
+        | TaskN of TaskNames
+        | Completed
+        | Aborted
 
     // Now I think I'll make a list of all the tasks eventually but I'll start by declaring them discretely
 
@@ -158,10 +166,13 @@ module TaskSystem =
     let taskToList taskNeeds =
         List.map (fun x -> (x, true)) taskNeeds.Gaining |> List.append (List.map (fun x -> (x,false)) taskNeeds.Decaying)
 
+     
+
+    // Returns a single Task from a given need
     let getTaskFromPriorityNeed tMap need =
         // this map now only contains tasks with the given need as the head of the gaining list
         //(Map.filter (fun k v -> v.Gaining.Head = need) tMap)
-        Map.tryPick (fun k v -> if v.Gaining.Head = need then Some k else None) tMap
+        Map.tryPick (fun k v -> if v.Gaining.Head = need then Some v else None) tMap
 
     let change key f map =
         Map.tryFind key map
@@ -170,14 +181,19 @@ module TaskSystem =
             | Some v -> Map.add key v map
             | None -> Map.remove key map
 
-    let foldSol tupList needMap =
+    let applyTaskToNeeds needMap tupList =
         List.fold (fun nm (k,v) -> change k (changeNeedDirOpt v) nm) needMap tupList
         //List.fold (fun nm (k,v) -> if Map.containsKey k nm then Map.add k v nm else nm) needMap tupList
+
+    let updateNeedsWithTask task needMap =
+        match task with
+        | Some x -> taskToList x |> applyTaskToNeeds needMap
+        | None -> needMap
+        
 
     let changeTask needMap newTask =
         //Using a task I need to operate on the needs, making them gain or decay
         //I think I'll try to do it in stages.
-        
         needMap
 
         //let sNeedList = List.sortBy (fun (_,y) -> -y) ((Map.map (fun k v -> v.CurrentValue) defaultMapOfNeeds) |> Map.toList)
@@ -186,4 +202,3 @@ module TaskSystem =
         //like below
         //(Map.map (fun k v -> v.CurrentValue) defaultMapOfNeeds) |> Map.toList |> (List.sortBy (fun (_,y) -> y))
 
-            

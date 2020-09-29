@@ -4,6 +4,11 @@ open Godot
 open PathProvider
 open GodotNodeUtils
 open NeedSystem
+open NeedSystem.TaskSystem
+
+// So I can use the adaptive package but not in the interactive
+open FSharp.Data.Adaptive
+
 
 // Porting enums from C# to F# to enable F# calling interopt
 type NeedNames = Rest = 0 | Boredom = 1
@@ -13,8 +18,10 @@ type PawnFs() as self =
     inherit Area2D()
 
     let startingNeeds = NeedSystem.defaultMapOfNeeds
+    let startingTasks = TaskSystem.defaultMapOfTasks
 
     let mutable mutNeedMap = startingNeeds
+    let mutable mutTaskMap = startingTasks //no use yet probably.
 
     let pathProviderNode = self.getNode "../Navigation2D"
 
@@ -29,9 +36,17 @@ type PawnFs() as self =
     //let wot = pathProviderNode.Value.saySomething
 
     // Currently only being called once every 60 frames or once per second.
+    // Due to being called from within the C# script currently.
     override this._PhysicsProcess(delta) =
+        // I need to choose a need,
+        let needList = (Map.map (fun k v -> v.CurrentValue) mutNeedMap) |> Map.toList |> (List.sortBy (fun (_,y) -> y))
+        // then look at the list of tasks
+        let newTask = getTaskFromPriorityNeed startingTasks (fst needList.Head)
+        // then choose a task and swap to it or maintain current task
+        mutNeedMap <- updateNeedsWithTask newTask mutNeedMap
+        // then iterate needs.
         mutNeedMap <- updateNeedMap mutNeedMap
-        mutNeedMap <- mapBounce mutNeedMap
+        //mutNeedMap <- mapBounce mutNeedMap
         Map.iter (fun (name : NeedName) (need : NeedSystem.Need ) -> GD.Print(need.CurrentValue.ToString())) mutNeedMap
 
     // Abstract (C# callable) Methods/funct ions

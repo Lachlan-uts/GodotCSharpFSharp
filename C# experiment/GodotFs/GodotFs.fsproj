@@ -42,6 +42,9 @@
     <Reference Include="GodotSharp">
       <HintPath>..\.mono\assemblies\Debug\GodotSharp.dll</HintPath>
     </Reference>
+    <Reference Include="FSharp.Data.Adaptive">
+      <HintPath>..\packages\FSharp.Data.Adaptive.1.0.0\lib\netstandard2.0\FSharp.Data.Adaptive.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
