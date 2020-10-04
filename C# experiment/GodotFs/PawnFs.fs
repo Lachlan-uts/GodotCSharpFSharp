@@ -22,24 +22,15 @@ type PawnFs() as self =
 
     let mutable mutNeedMap = startingNeeds
     let mutable mutTaskMap = startingTasks //no use yet probably.
-    let mutable mutCurrentMission:TaskNames Option = None
+    let mutable mutCurrentMission = None
 
     let mutable mutCurrentPathA:Vector2 [] = Array.empty
     let mutable mutCurrentPoint = 1
     let mutable mutCurrentPathL:Vector2 list = List.empty
 
     let pathProviderNode = self.getNode "../Navigation2D"
-    let visAid = self.getNode "visualAid"
+    let visAidNode:Lazy<Line2D> = self.getNode "visualAid"
 
-    let pathProviderCS =
-        lazy(
-            self.GetParent().GetNode(new NodePath("Navigation2D"))
-            :?> Navigation2D
-    )
-
-    //let testVec = new Vector2(0.0f, 0.0f)
-
-    //let wot = pathProviderNode.Value.saySomething
 
     // the signal system
     let mutable currentTask = 0
@@ -49,14 +40,26 @@ type PawnFs() as self =
 
     // Functions/actions that don't require iter in the main loop
     let getPath destination =
-        //visAid.Value
+        visAidNode.Value.set_Points(PathProvider.calcPath pathProviderNode self.Position destination)
         PathProvider.calcPath pathProviderNode self.Position destination // Get the array of vector2 points
         |> Array.toList // Turn it into a list
         |> List.tail // Remove the first element because it's where this entity is and therefore is not needed.
 
+    let modifyPathList pathList =
+        match pathList with
+        | x::[] when self.Position.DistanceTo(x) < 1.0f ->
+            self.EmitSignal("fsTaskEnded","walk")
+            List.Empty
+        | x::xs when self.Position.DistanceTo(x) < 1.0f -> xs
+        | _ -> pathList
+
+
     // The missions/actions/task functions, probably want to pull them out to a distinct module
     let walk (dir : Vector2) (speed : float32) (delta : float32) =
-        self.Translate(dir * speed * delta)
+        let step = self.Position.DirectionTo(mutCurrentPathL.Head)
+        self.Translate(step * speed * delta)
+        mutCurrentPathL <- modifyPathList mutCurrentPathL
+
 
     let chopTree () =
         ()
@@ -64,15 +67,29 @@ type PawnFs() as self =
     let nap () =
         ()
 
+
+
+    let chooseMission currentMission (needL : (NeedName * float) list) =
+        match currentMission with
+        | None -> getTaskNeedsFromPriorityNeed startingTasks (fst needL.Head) //new mission
+        | Some x when (snd needL.Head) < 2.0 -> getTaskNeedsFromPriorityNeed startingTasks (fst needL.Head) //new mission
+        | _ -> currentMission //same mission
+
+    //let startMission mission =
+        //match mission with
+        //|
+
+    override this._Ready() =
+        visAidNode.Value.SetAsToplevel(true)
+
     // Currently only being called once every 60 frames or once per second.
     // Due to being called from within the C# script currently.
     override this._PhysicsProcess(delta) =
+        //get the current state of needs
         let needList = (Map.map (fun k v -> v.CurrentValue) mutNeedMap) |> Map.toList |> (List.sortBy (fun (_,y) -> y))
-        let chooseMission currentMission (needL : (NeedName * float) list) =
-            match currentMission with
-            | None -> "get new task"
-            | Some x when (snd needL.Head) < 2.0 -> "get new task"
-            | _ -> "Stick with it"
+
+        //change or stick with current mission
+        mutCurrentMission <- chooseMission mutCurrentMission needList
 
         //do tasky stuff here.
         let action taskName =
@@ -84,7 +101,7 @@ type PawnFs() as self =
         // I need to choose a need,
         //let needList = (Map.map (fun k v -> v.CurrentValue) mutNeedMap) |> Map.toList |> (List.sortBy (fun (_,y) -> y))
         // then look at the list of tasks
-        let newTask = getTaskFromPriorityNeed startingTasks (fst needList.Head)
+        let newTask = getTaskNeedsFromPriorityNeed startingTasks (fst needList.Head)
         // then choose a task and swap to it or maintain current task
         mutNeedMap <- updateNeedsWithTask newTask mutNeedMap
         // then iterate needs.
@@ -101,7 +118,11 @@ type PawnFs() as self =
 
     //abstract member ChangeTaskAdjustNeeds: Need
 
-
+    abstract member FsTaskEnded: string -> unit
+    default this.FsTaskEnded taskName =
+        match taskName with
+        | "walk" -> mutCurrentMission <- None
+        | _ -> GD.Print(taskName)
         
     abstract member ChooseWanderDest: Rect2 -> int[] -> Vector2
     default this.ChooseWanderDest (pArea : Rect2) (validTiles : int[]) =

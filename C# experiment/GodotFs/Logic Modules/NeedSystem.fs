@@ -166,10 +166,12 @@ module TaskSystem =
     let taskToList taskNeeds =
         List.map (fun x -> (x, true)) taskNeeds.Gaining |> List.append (List.map (fun x -> (x,false)) taskNeeds.Decaying)
 
-     
+
+    let getTaskNameFromPriorityNeed tMap need =
+        Map.tryFindKey (fun k v -> if v.Gaining.Head = need then true else false) tMap
 
     // Returns a single Task from a given need
-    let getTaskFromPriorityNeed tMap need =
+    let getTaskNeedsFromPriorityNeed tMap need =
         // this map now only contains tasks with the given need as the head of the gaining list
         //(Map.filter (fun k v -> v.Gaining.Head = need) tMap)
         Map.tryPick (fun k v -> if v.Gaining.Head = need then Some v else None) tMap
