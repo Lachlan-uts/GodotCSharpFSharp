@@ -11,6 +11,12 @@ let randy =
 let getClosestValidTile (nav2D : Lazy<Navigation2D>) point =
     nav2D.Value.GetClosestPoint(point)
 
+let private calculateValidAreaFromTilemap (floor : Lazy<TileMap>) cellSize rect =
+    Rect2(floor.Value.GetUsedRect().Position*cellSize,floor.Value.GetUsedRect().Size*cellSize).Clip rect
+
+let calcValidArea (floor : Lazy<TileMap>) rect =
+    calculateValidAreaFromTilemap floor 16.0f rect
+
 /// <summary>
 /// gets a random point in area
 /// yoo

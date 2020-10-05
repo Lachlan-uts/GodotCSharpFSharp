@@ -29,6 +29,7 @@ type PawnFs() as self =
     let mutable mutCurrentPathL:Vector2 list = List.empty
 
     let pathProviderNode = self.getNode "../Navigation2D"
+    let floorNode = self.getNode "../Navigation2D/TileMap"
     let visAidNode:Lazy<Line2D> = self.getNode "visualAid"
 
 
@@ -60,24 +61,45 @@ type PawnFs() as self =
         self.Translate(step * speed * delta)
         mutCurrentPathL <- modifyPathList mutCurrentPathL
 
-
     let chopTree () =
         ()
 
     let nap () =
         ()
 
+    // The function to handle the various missions
+    let act taskName delta =
+        match taskName with
+        | Wander -> walk (new Vector2(0.0f,0.0f)) 10.0f delta
+        //| "task2" -> chopTree ()
+        | _ -> nap ()
 
+    let getWanderArea center dist =
+        new Rect2(center + new Vector2(-(dist/2.0f),-(dist/2.0f)),new Vector2(dist,dist))
+
+    let startMission mission =
+        match mission with
+        | Some Wander -> 
+            mutCurrentPathL <- getPath (self.ChooseWanderDest (calcValidArea floorNode (getWanderArea self.Position 100.0f)) [|0|])
+            mutNeedMap <- updateNeedsWithTask (Map.tryFind Wander mutTaskMap) mutNeedMap
+            mission
+        | Some x when Map.containsKey x mutTaskMap ->
+            mutNeedMap <- updateNeedsWithTask (Map.tryFind Wander mutTaskMap) mutNeedMap
+            mission
+        | _ -> mission
 
     let chooseMission currentMission (needL : (NeedName * float) list) =
+        //let blah = getTaskNameFromPriorityNeed startingTasks (fst needL.Head)
         match currentMission with
-        | None -> getTaskNeedsFromPriorityNeed startingTasks (fst needL.Head) //new mission
-        | Some x when (snd needL.Head) < 2.0 -> getTaskNeedsFromPriorityNeed startingTasks (fst needL.Head) //new mission
+        | None -> 
+            getTaskNameFromPriorityNeed startingTasks (fst needL.Head)
+            |> startMission //new mission
+        | Some x when (snd needL.Head) < 2.0 -> 
+            getTaskNameFromPriorityNeed startingTasks (fst needL.Head)
+            |> startMission //new mission
         | _ -> currentMission //same mission
 
-    //let startMission mission =
-        //match mission with
-        //|
+
 
     override this._Ready() =
         visAidNode.Value.SetAsToplevel(true)
@@ -92,20 +114,16 @@ type PawnFs() as self =
         mutCurrentMission <- chooseMission mutCurrentMission needList
 
         //do tasky stuff here.
-        let action taskName =
-            match taskName with
-            | "task1" -> walk (new Vector2(0.0f,0.0f)) 10.0f delta
-            | "task2" -> chopTree ()
-            | _ -> nap ()
+        act mutCurrentMission.Value delta
 
         // I need to choose a need,
         //let needList = (Map.map (fun k v -> v.CurrentValue) mutNeedMap) |> Map.toList |> (List.sortBy (fun (_,y) -> y))
         // then look at the list of tasks
-        let newTask = getTaskNeedsFromPriorityNeed startingTasks (fst needList.Head)
-        // then choose a task and swap to it or maintain current task
-        mutNeedMap <- updateNeedsWithTask newTask mutNeedMap
-        // then iterate needs.
-        mutNeedMap <- updateNeedMap mutNeedMap // Make this take a task and time?
+        //let newTask = getTaskNeedsFromPriorityNeed startingTasks (fst needList.Head)
+        //// then choose a task and swap to it or maintain current task
+        //mutNeedMap <- updateNeedsWithTask newTask mutNeedMap
+        //// then iterate needs.
+        //mutNeedMap <- updateNeedMap mutNeedMap // Make this take a task and time?
         //mutNeedMap <- mapBounce mutNeedMap
         Map.iter (fun (name : NeedName) (need : NeedSystem.Need ) -> GD.Print(need.CurrentValue.ToString())) mutNeedMap
 
