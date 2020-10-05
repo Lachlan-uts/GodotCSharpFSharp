@@ -377,21 +377,21 @@ public class Pawn : PawnFs
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(float delta)
-    {
-        //This movement function shouldn't care about state, though maybe care about needs? Clearly it should also be interuptable eventually
-        // Should probably pull at least part of this logic into WalkPath() (or equivelent) method.
-        if (CurrentPath.Length > 1 && needStates[NeedNames.Rest] > 0)
-        {
-            //GD.Print("current point is: ", currentPoint.ToString());
-            // GD.Print(currentPoint.ToString());
-            velocity = this.Position.DirectionTo(currentPath[currentPoint]);
+    //public override void _Process(float delta)
+    //{
+    //    //This movement function shouldn't care about state, though maybe care about needs? Clearly it should also be interuptable eventually
+    //    // Should probably pull at least part of this logic into WalkPath() (or equivelent) method.
+    //    if (CurrentPath.Length > 1 && needStates[NeedNames.Rest] > 0)
+    //    {
+    //        //GD.Print("current point is: ", currentPoint.ToString());
+    //        // GD.Print(currentPoint.ToString());
+    //        velocity = this.Position.DirectionTo(currentPath[currentPoint]);
 
-            //GD.Print(velocity);item
-            this.Position += (velocity * delta * speed);
-            WalkPath();
-        }
-    }
+    //        //GD.Print(velocity);item
+    //        this.Position += (velocity * delta * speed);
+    //        WalkPath();
+    //    }
+    //}
 
     public override void _PhysicsProcess(float delta)
     {

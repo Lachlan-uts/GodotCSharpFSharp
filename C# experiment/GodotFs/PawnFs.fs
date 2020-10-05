@@ -30,7 +30,7 @@ type PawnFs() as self =
 
     let pathProviderNode = self.getNode "../Navigation2D"
     let floorNode = self.getNode "../Navigation2D/TileMap"
-    let visAidNode:Lazy<Line2D> = self.getNode "visualAid"
+    let visAidNode:Lazy<Line2D> = self.getNode "fsAid"
 
 
     // the signal system
@@ -49,7 +49,7 @@ type PawnFs() as self =
     let modifyPathList pathList =
         match pathList with
         | x::[] when self.Position.DistanceTo(x) < 1.0f ->
-            self.EmitSignal("fsTaskEnded","walk")
+            self.EmitSignal("FsSignalTest","walk")
             List.Empty
         | x::xs when self.Position.DistanceTo(x) < 1.0f -> xs
         | _ -> pathList
@@ -102,7 +102,15 @@ type PawnFs() as self =
 
 
     override this._Ready() =
+        let connectSig = self.Connect("FsSignalTest", self, "FsTaskEnded")
         visAidNode.Value.SetAsToplevel(true)
+
+
+    override this._Process(delta) =
+        match mutCurrentMission with
+        | Some x ->
+            act x delta
+        | None -> GD.Print("no mission")
 
     // Currently only being called once every 60 frames or once per second.
     // Due to being called from within the C# script currently.
@@ -114,7 +122,7 @@ type PawnFs() as self =
         mutCurrentMission <- chooseMission mutCurrentMission needList
 
         //do tasky stuff here.
-        act mutCurrentMission.Value delta
+        //act mutCurrentMission.Value delta
 
         // I need to choose a need,
         //let needList = (Map.map (fun k v -> v.CurrentValue) mutNeedMap) |> Map.toList |> (List.sortBy (fun (_,y) -> y))
