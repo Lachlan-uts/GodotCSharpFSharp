@@ -2,13 +2,12 @@
   <MonoDevelop.Ide.ItemProperties.C_223_220Experiment PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="GodotFs/PawnFs.fs">
     <Files>
-      <File FileName="GodotFs/PawnFs.fs" Line="73" Column="62" />
+      <File FileName="GodotFs/PawnFs.fs" Line="35" Column="5" />
       <File FileName="GodotFs/PathfindingFs.fs" Line="18" Column="51" />
       <File FileName="GodotFs/GodotNodeUtils.fs" Line="20" Column="20" />
       <File FileName="GodotFs/GodotFs.fsproj" Line="1" Column="1" />
       <File FileName="GodotFs/Logic Modules/NeedSystem.fs" Line="170" Column="36" />
-      <File FileName="PathfindingExperiment/Pawn.cs" Line="276" Column="84" />
-      <File FileName="PathfindingExperiment/PathfindingTilemapExperiment.cs" Line="54" Column="68" />
+      <File FileName="PathfindingExperiment/Pawn.cs" Line="387" Column="9" NotebookId="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -18,6 +17,7 @@
               <Node name="PathfindingExperiment" expanded="True" />
             </Node>
             <Node name="GodotFs" expanded="True">
+              <Node name="Packages" expanded="True" />
               <Node name="Logic Modules" expanded="True" />
               <Node name="PawnFs.fs" selected="True" />
             </Node>
